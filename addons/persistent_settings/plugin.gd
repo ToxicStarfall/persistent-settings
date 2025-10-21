@@ -13,7 +13,6 @@ var ProjectMenu: PopupMenu
 
 func _enter_tree() -> void:
 	_initialize_plugin_variables()
-	print(EditorInterface.get_base_control().get_children())
 
 	var settings = EditorInterface.get_editor_settings()
 	if settings.has_setting("persistant_settings/editor/property"):
@@ -25,9 +24,31 @@ func _enter_tree() -> void:
 	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
 	var dir = DirAccess.open(config_folder)
 	if dir:
-		print(dir.get_files())
-		if dir.dir_exists("persistant_settings"):
-			pass
+		# TODO: Ask for save location ?
+		# Create dir "/plugin_data/persistant_settings" ?
+		if dir.dir_exists("persistant_settings_plugin"):
+			dir.open("persistant_settings_plugin")
+		else:
+			dir.make_dir("persistant_settings_plugin")
+			dir.open("persistant_settings_plugin")
+
+		#var file: FileAccess = FileAccess.open("favorite_properties", FileAccess.WRITE_READ)
+		#var text = file.get_as_text()
+		#file.store_string(text + "s")
+		#print(file.get_as_text())
+		#file.close()
+
+		config_folder = ProjectSettings.globalize_path(config_folder)
+		var config = ConfigFile.new()
+		config.set_value("Node", "a", "2")
+		print(config.get_value("Node", "a"))
+		config.save(config_folder + "/apples")
+		#var a = ConfigFile.new()
+		#a.load("apples")
+		#print(a.get_value("Node", "a"))
+
+		var project_favorited_properties = FileAccess.open("res://.godot/editor/favorite_properties", FileAccess.READ)
+		print(project_favorited_properties.get_as_text())
 
 	#main_panel_instance = MainPanel.instantiate()
 	# Add the main panel to the editor's main viewport.
@@ -50,8 +71,7 @@ func _exit_tree() -> void:
 #
 #func _get_plugin_name():
 	#return "Settings"
-
-
+#
 #func _get_plugin_icon():
 	#return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
 
@@ -73,7 +93,6 @@ func _initialize_plugin_variables():
 func _apply_persistant_plugins():
 	pass
 
-
 func _apply_persistant_settings():
 	pass
 
@@ -87,4 +106,11 @@ func _create_persistant_editor_settings():
 	settings.get_setting("persistant_settings/editor/property")
 	var list_of_settings = settings.get_property_list()
 
+	pass
+
+
+func _create_data_directory():
+	pass
+
+func _delete_data_directory():
 	pass
