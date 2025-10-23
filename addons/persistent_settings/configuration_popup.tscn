@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://chgunnmmqhblj"]
+
+[ext_resource type="Script" uid="uid://c48yp8ptwpur" path="res://addons/persistent_settings/configuration_popup.gd" id="1_rih0t"]
+
+[node name="ConfigurationPopup" type="Window"]
+size = Vector2i(300, 150)
+script = ExtResource("1_rih0t")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "asdad"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]

@@ -2,24 +2,27 @@
 extends EditorPlugin
 
 
-#const MainPanel = preload("res://addons/main_screen/main_panel.tscn")
+const DEFAULT_PLUGIN_CONFIG_FOLDER = "persistant_settings_plugin"
 
-var main_panel_instance
+const ConfigurationPopupScene = preload("res://addons/persistent_settings/configuration_popup.tscn")
+var ConfigurationPopup: Window
 
+# Editor control nodes
 var EditorToolbar
 var EditorMenuBar: MenuBar
 var ProjectMenu: PopupMenu
 
 
 func _enter_tree() -> void:
+	print("tree entered")
 	_initialize_plugin_variables()
 
-	var settings = EditorInterface.get_editor_settings()
-	if settings.has_setting("persistant_settings/editor/property"):
-		print("Existing plugin settings")
-	else:
-		print("Creating plugin settings")
-		_create_persistant_editor_settings()
+	#var settings = EditorInterface.get_editor_settings()
+	#if settings.has_setting("persistant_settings/editor/property"):
+		#print("Existing plugin settings")
+	#else:
+		#print("Creating plugin settings")
+		#_create_persistant_editor_settings()
 
 	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
 	var dir = DirAccess.open(config_folder)
@@ -37,6 +40,16 @@ func _enter_tree() -> void:
 		#file.store_string(text + "s")
 		#print(file.get_as_text())
 		#file.close()
+
+		#
+		ConfigurationPopup = ConfigurationPopupScene.instantiate()
+		#ConfigurationPopup.force_native = true
+		#ConfigurationPopup.hide()
+		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
+		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+
+		show_plugin_configuration_popup()
+
 
 		config_folder = ProjectSettings.globalize_path(config_folder)
 		var config = ConfigFile.new()
@@ -58,8 +71,11 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	if main_panel_instance:
-		main_panel_instance.queue_free()
+	print("exited")
+	# This causes error for some reason
+
+	#if main_panel_instance:
+		#main_panel_instance.queue_free()
 
 
 #func _has_main_screen():
@@ -89,25 +105,36 @@ func _initialize_plugin_variables():
 	ProjectMenu = EditorMenuBar.get_child(1)
 
 
+func show_plugin_configuration_popup():
+	#ConfigurationPopup.hide()
+	#ConfigurationPopup.always_on_top = true
+	#ConfigurationPopup.force_native = true
+	#ConfigurationPopup.sharp_corners = true
+	#ConfigurationPopup.popup_centered()
+	ConfigurationPopup.move_to_center()
 
-func _apply_persistant_plugins():
-	pass
 
-func _apply_persistant_settings():
-	pass
+#func _apply_persistant_plugins():
+	#pass
+#
+#func _apply_persistant_settings():
+	#pass
 
 
 func _create_persistant_editor_settings():
-	var settings = EditorInterface.get_editor_settings()
-	# `settings.set("some/property", 10)` also works as this class overrides `_set()` internally.
-	settings.set_setting("persistant_settings/editor/property", 10)
-	settings.set_setting("persistant_settings/plugins/property", 10)
-	# `settings.get("some/property")` also works as this class overrides `_get()` internally.
-	settings.get_setting("persistant_settings/editor/property")
-	var list_of_settings = settings.get_property_list()
+	#var settings = EditorInterface.get_editor_settings()
+	## `settings.set("some/property", 10)` also works as this class overrides `_set()` internally.
+	#settings.set_setting("persistant_settings/editor/property", 10)
+	#settings.set_setting("persistant_settings/plugins/property", 10)
+	## `settings.get("some/property")` also works as this class overrides `_get()` internally.
+	#settings.get_setting("persistant_settings/editor/property")
+	#var list_of_settings = settings.get_property_list()
 
 	pass
 
+
+func plugin_config_folder_exists():
+	pass
 
 func _create_data_directory():
 	pass
