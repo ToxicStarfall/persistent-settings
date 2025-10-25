@@ -4,8 +4,12 @@ extends EditorPlugin
 
 const DEFAULT_PLUGIN_CONFIG_FOLDER = "persistant_settings_plugin"
 
-const ConfigurationPopupScene = preload("res://addons/persistent_settings/configuration_popup.tscn")
+# ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
+const configuration_popup_scene = preload("res://addons/persistent_settings/configuration_popup.tscn")
 var ConfigurationPopup: Window
+
+# Persistant nodes while the plugin is enabled
+var PopupButton: Button = Button.new()
 
 # Editor control nodes
 var EditorToolbar
@@ -14,8 +18,9 @@ var ProjectMenu: PopupMenu
 
 
 func _enter_tree() -> void:
-	print("tree entered")
+	#print("tree entered")
 	_initialize_plugin_variables()
+	_initialize_plugin_data()
 
 	#var settings = EditorInterface.get_editor_settings()
 	#if settings.has_setting("persistant_settings/editor/property"):
@@ -24,46 +29,7 @@ func _enter_tree() -> void:
 		#print("Creating plugin settings")
 		#_create_persistant_editor_settings()
 
-	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
-	var dir = DirAccess.open(config_folder)
-	if dir:
-		# TODO: Ask for save location ?
-		# Create dir "/plugin_data/persistant_settings" ?
-		if dir.dir_exists("persistant_settings_plugin"):
-			dir.open("persistant_settings_plugin")
-		else:
-			dir.make_dir("persistant_settings_plugin")
-			dir.open("persistant_settings_plugin")
-
-		#var file: FileAccess = FileAccess.open("favorite_properties", FileAccess.WRITE_READ)
-		#var text = file.get_as_text()
-		#file.store_string(text + "s")
-		#print(file.get_as_text())
-		#file.close()
-
-		#
-		ConfigurationPopup = ConfigurationPopupScene.instantiate()
-		#ConfigurationPopup.force_native = true
-		#ConfigurationPopup.hide()
-		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
-		EditorInterface.get_base_control().add_child(ConfigurationPopup)
-
-		show_plugin_configuration_popup()
-
-
-		config_folder = ProjectSettings.globalize_path(config_folder)
-		var config = ConfigFile.new()
-		config.set_value("Node", "a", "2")
-		print(config.get_value("Node", "a"))
-		config.save(config_folder + "/apples")
-		#var a = ConfigFile.new()
-		#a.load("apples")
-		#print(a.get_value("Node", "a"))
-
-		var project_favorited_properties = FileAccess.open("res://.godot/editor/favorite_properties", FileAccess.READ)
-		print(project_favorited_properties.get_as_text())
-
-	#main_panel_instance = MainPanel.instantiate()
+	#main_panel_instance = MainPanel.instantiate]]()
 	# Add the main panel to the editor's main viewport.
 	#EditorInterface.get_editor_main_screen().add_child(main_panel_instance)
 	# Hide the main panel. Very much required.
@@ -71,11 +37,12 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	print("exited")
-	# This causes error for some reason
+	#print("exited")
+	_remove_plugin_nodes()
 
 	#if main_panel_instance:
 		#main_panel_instance.queue_free()
+	pass
 
 
 #func _has_main_screen():
@@ -93,32 +60,70 @@ func _exit_tree() -> void:
 
 
 func _initialize_plugin_variables():
-	var control = Button.new()
-	control.text = "Persistant Settings"
-	add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, control)
-	control.get_parent().move_child(control, control.get_index() - 3)
+	_add_plugin_nodes()
+	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 3)
 
-	EditorToolbar = control.get_parent()
-	EditorToolbar.remove_child(control)
+	EditorToolbar = PopupButton.get_parent()
+	#EditorToolbar = EditorPlugin.CONTAINER_TOOLBAR
+	#EditorToolbar.remove_child(control)
 
 	EditorMenuBar = EditorToolbar.get_child(0)
 	ProjectMenu = EditorMenuBar.get_child(1)
 
 
-func show_plugin_configuration_popup():
+func _initialize_plugin_nodes():
+	pass
+
+
+func _initialize_plugin_data():
+	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	var dir = DirAccess.open(config_folder)
+	if dir:
+		# TODO: Ask for save location ?
+		# Create dir "/plugin_data/persistant_settings" ?
+		if dir.dir_exists("persistant_settings_plugin"):
+			dir.open("persistant_settings_plugin")
+		else:
+			dir.make_dir("persistant_settings_plugin")
+			dir.open("persistant_settings_plugin")
+
+		_add_configuration_popup()
+
+		config_folder = ProjectSettings.globalize_path(config_folder)
+		var config = ConfigFile.new()
+		config.set_value("Node", "a", "2")
+		print(config.get_value("Node", "a"))
+		config.save(config_folder + "/apples")
+		#var a = ConfigFile.new()
+		#a.load("apples")
+		#print(a.get_value("Node", "a"))
+
+		var project_favorited_properties = FileAccess.open("res://.godot/editor/favorite_properties", FileAccess.READ)
+		print(project_favorited_properties.get_as_text())
+
+
+func _add_plugin_nodes():
+	PopupButton.text = "Persistant Settings"
+	PopupButton.pressed.connect( _add_configuration_popup )
+	add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
+
+
+func _remove_plugin_nodes():
+	PopupButton.pressed.disconnect( _add_configuration_popup )
+	remove_control_from_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
+
+
+func _add_configuration_popup():
+	ConfigurationPopup = configuration_popup_scene.instantiate()
+	ConfigurationPopup.theme = EditorInterface.get_editor_theme()
+	ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
+	EditorInterface.get_base_control().add_child(ConfigurationPopup)
+
 	#ConfigurationPopup.hide()
-	#ConfigurationPopup.always_on_top = true
 	#ConfigurationPopup.force_native = true
-	#ConfigurationPopup.sharp_corners = true
-	#ConfigurationPopup.popup_centered()
+	ConfigurationPopup.show()
 	ConfigurationPopup.move_to_center()
-
-
-#func _apply_persistant_plugins():
-	#pass
-#
-#func _apply_persistant_settings():
-	#pass
+	#ConfigurationPopup.popup_centered()
 
 
 func _create_persistant_editor_settings():
@@ -129,7 +134,6 @@ func _create_persistant_editor_settings():
 	## `settings.get("some/property")` also works as this class overrides `_get()` internally.
 	#settings.get_setting("persistant_settings/editor/property")
 	#var list_of_settings = settings.get_property_list()
-
 	pass
 
 
