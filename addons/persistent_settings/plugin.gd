@@ -1,24 +1,32 @@
 @tool
 extends EditorPlugin
 
+# Editor variables
+var default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
+var default_project_config_dir = "res://.godot/editor"
 
-const DEFAULT_PLUGIN_CONFIG_FOLDER = "persistant_settings_plugin"
-
-# ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
-const configuration_popup_scene = preload("res://addons/persistent_settings/configuration_popup.tscn")
-var ConfigurationPopup: Window
-
-# Persistant nodes while the plugin is enabled
-var PopupButton: Button = Button.new()
-
-# Editor control nodes
+# Editor nodes
 var EditorToolbar
 var EditorMenuBar: MenuBar
 var ProjectMenu: PopupMenu
 
 
+# Plugin variables
+const default_plugin_config_folder = "/persistant_settings_plugin"
+var default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir )
+
+var plugin_config_dir = default_plugin_config_dir
+var plugin_config_folder = default_plugin_config_folder
+
+# Plugin nodes
+# ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
+const configuration_popup_scene = preload("res://addons/persistent_settings/configuration_popup.tscn")
+var ConfigurationPopup: Window
+
+var PopupButton: Button = Button.new()
+
+
 func _enter_tree() -> void:
-	#print("tree entered")
 	_initialize_plugin_variables()
 	_initialize_plugin_data()
 
@@ -37,12 +45,10 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	#print("exited")
 	_remove_plugin_nodes()
 
 	#if main_panel_instance:
 		#main_panel_instance.queue_free()
-	pass
 
 
 #func _has_main_screen():
@@ -71,10 +77,6 @@ func _initialize_plugin_variables():
 	ProjectMenu = EditorMenuBar.get_child(1)
 
 
-func _initialize_plugin_nodes():
-	pass
-
-
 func _initialize_plugin_data():
 	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
 	var dir = DirAccess.open(config_folder)
@@ -88,18 +90,15 @@ func _initialize_plugin_data():
 			dir.open("persistant_settings_plugin")
 
 		_add_configuration_popup()
-
-		config_folder = ProjectSettings.globalize_path(config_folder)
-		var config = ConfigFile.new()
-		config.set_value("Node", "a", "2")
-		print(config.get_value("Node", "a"))
-		config.save(config_folder + "/apples")
+		print(default_editor_config_dir)
+		#config_folder = ProjectSettings.globalize_path(config_folder)
+		#var config = ConfigFile.new()
+		#config.set_value("Node", "a", "2")
+		#print(config.get_value("Node", "a"))
+		#config.save(config_folder + "/apples")
 		#var a = ConfigFile.new()
 		#a.load("apples")
 		#print(a.get_value("Node", "a"))
-
-		var project_favorited_properties = FileAccess.open("res://.godot/editor/favorite_properties", FileAccess.READ)
-		print(project_favorited_properties.get_as_text())
 
 
 func _add_plugin_nodes():
@@ -114,16 +113,50 @@ func _remove_plugin_nodes():
 
 
 func _add_configuration_popup():
-	ConfigurationPopup = configuration_popup_scene.instantiate()
-	ConfigurationPopup.theme = EditorInterface.get_editor_theme()
-	ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
-	EditorInterface.get_base_control().add_child(ConfigurationPopup)
-
+	if !ConfigurationPopup:
+		ConfigurationPopup = configuration_popup_scene.instantiate()
+		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
+		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
+		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+	else:
+		ConfigurationPopup.grab_focus()
+		ConfigurationPopup.request_attention()
 	#ConfigurationPopup.hide()
 	#ConfigurationPopup.force_native = true
-	ConfigurationPopup.show()
-	ConfigurationPopup.move_to_center()
+	#ConfigurationPopup.show()
+	#ConfigurationPopup.move_to_center()
 	#ConfigurationPopup.popup_centered()
+
+
+
+func import_favorite_properties():
+	var global_favorite_properties = ConfigFile.new().load(default_plugin_config_dir + default_plugin_config_folder)
+	var local_favorited_properties: ConfigFile = global_favorite_properties
+	local_favorited_properties.save(default_project_config_dir + "/favorite_properties")
+
+
+
+func save_favorite_properties():
+	var local_favorited_properties = ConfigFile.new().load(default_project_config_dir + "/favorite_properties")
+	#print(local_favorited_properties.get_as_text())
+
+	var global_favorite_properties: ConfigFile = local_favorited_properties
+	global_favorite_properties.save(default_plugin_config_dir + default_plugin_config_folder)
+
+
+#func plugin_config_folder_exists():
+	#var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	#var dir = DirAccess.open(config_folder)
+	#if dir:
+		#if dir.dir_exists("persistant_settings_plugin"):
+			#dir.open("persistant_settings_plugin")
+		#else:
+			#dir.make_dir("persistant_settings_plugin")
+			#dir.open("persistant_settings_plugin")
+
+
+func create_plugin_config_folder():
+	pass
 
 
 func _create_persistant_editor_settings():
@@ -134,14 +167,4 @@ func _create_persistant_editor_settings():
 	## `settings.get("some/property")` also works as this class overrides `_get()` internally.
 	#settings.get_setting("persistant_settings/editor/property")
 	#var list_of_settings = settings.get_property_list()
-	pass
-
-
-func plugin_config_folder_exists():
-	pass
-
-func _create_data_directory():
-	pass
-
-func _delete_data_directory():
 	pass

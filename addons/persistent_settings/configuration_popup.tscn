@@ -1,16 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://chgunnmmqhblj"]
+[gd_scene load_steps=5 format=3 uid="uid://chgunnmmqhblj"]
 
 [ext_resource type="Script" uid="uid://c48yp8ptwpur" path="res://addons/persistent_settings/configuration_popup.gd" id="1_rih0t"]
+[ext_resource type="Texture2D" uid="uid://28q4iwjqihs2" path="res://icon.svg" id="2_cx65v"]
+[ext_resource type="PackedScene" uid="uid://dywms8oine7jk" path="res://addons/persistent_settings/basic_screen.tscn" id="3_8jt1d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rih0t"]
 bg_color = Color(0.211765, 0.239216, 0.290196, 1)
 
 [node name="ConfigurationPopup" type="Window"]
-position = Vector2i(0, 36)
-size = Vector2i(600, 400)
+title = "Persistant Settings Plugin Configuration"
+initial_position = 1
+size = Vector2i(800, 600)
+transient = true
 script = ExtResource("1_rih0t")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundColor" type="ColorRect" parent="."]
 show_behind_parent = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,10 +34,27 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+[node name="PanelOutline" type="ColorRect" parent="MarginContainer"]
 show_behind_parent = true
 layout_mode = 2
 color = Color(0.211765, 0.239216, 0.290196, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelOutline"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PanelBackground" type="ColorRect" parent="MarginContainer/PanelOutline/MarginContainer"]
+show_behind_parent = true
+layout_mode = 2
+color = Color(0.129412, 0.14902, 0.180392, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -47,7 +68,7 @@ tab_count = 2
 tab_0/title = "Welcome"
 tab_1/title = "Basic"
 
-[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer/TabBar"]
+[node name="BackgroundColor" type="ColorRect" parent="MarginContainer/VBoxContainer/TabBar"]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -82,6 +103,7 @@ size_flags_vertical = 3
 
 [node name="WelcomeScreen" type="PanelContainer" parent="MarginContainer/VBoxContainer/Screens"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -98,40 +120,84 @@ theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 4
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
-text = "asdad"
+bbcode_enabled = true
+text = "Hi, it seems like its your first time enabling this plugin.
+Would you like to import your saved settings?
+"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImportAllButton" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import All (WIP)"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImportProjectSettings" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import Project Settings (WIP)"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImportPropertiesButton" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import Favorited Properties"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer3"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "[i]Status[/i]"
+fit_content = true
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer3"]
+visible = false
+layout_mode = 2
+icon = ExtResource("2_cx65v")
+icon_alignment = 1
+expand_icon = true
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImportLayersButton" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer4"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Import Layers (WIP)"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImportInputButton" type="Button" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import Inputs (WIP)"
 
 [node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/Screens/WelcomeScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 10
 text = "Do not show again"
 
-[node name="BasicScreen" type="PanelContainer" parent="MarginContainer/VBoxContainer/Screens"]
+[node name="BasicScreen" parent="MarginContainer/VBoxContainer/Screens" instance=ExtResource("3_8jt1d")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -35.0
-offset_bottom = -35.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Screens/BasicScreen"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[connection signal="close_requested" from="." to="." method="_on_close_requested"]
