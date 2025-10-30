@@ -1,9 +1,11 @@
 @tool
 extends EditorPlugin
 
+
 # Editor variables
-var default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
-var default_project_config_dir = "res://.godot/editor"
+const default_project_config_dir = "res://.godot/editor"
+var default_editor_config_dir
+var default_plugin_config_dir
 
 # Editor nodes
 var EditorToolbar
@@ -13,10 +15,9 @@ var ProjectMenu: PopupMenu
 
 # Plugin variables
 const default_plugin_config_folder = "/persistant_settings_plugin"
-var default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir )
-
-var plugin_config_dir = default_plugin_config_dir
-var plugin_config_folder = default_plugin_config_folder
+var plugin_config_dir
+var plugin_config_folder
+var plugin_config_path
 
 # Plugin nodes
 # ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
@@ -27,6 +28,7 @@ var PopupButton: Button = Button.new()
 
 
 func _enter_tree() -> void:
+	_initialize_editor_variables()
 	_initialize_plugin_variables()
 	_initialize_plugin_data()
 
@@ -65,7 +67,17 @@ func _exit_tree() -> void:
 	#return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
 
 
+# Initializes editor variables
+func _initialize_editor_variables():
+	default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
+	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir )
+
+
 func _initialize_plugin_variables():
+	plugin_config_dir = default_plugin_config_dir
+	plugin_config_folder = default_plugin_config_folder
+	plugin_config_path = plugin_config_dir + plugin_config_folder
+
 	_add_plugin_nodes()
 	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 3)
 
@@ -90,14 +102,14 @@ func _initialize_plugin_data():
 			dir.open("persistant_settings_plugin")
 
 		_add_configuration_popup()
-		print(default_editor_config_dir)
-		#config_folder = ProjectSettings.globalize_path(config_folder)
+
+		#config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
 		#var config = ConfigFile.new()
 		#config.set_value("Node", "a", "2")
 		#print(config.get_value("Node", "a"))
 		#config.save(config_folder + "/apples")
 		#var a = ConfigFile.new()
-		#a.load("apples")
+		#a.load(config_folder + "apples")
 		#print(a.get_value("Node", "a"))
 
 
@@ -118,6 +130,9 @@ func _add_configuration_popup():
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+
+		ConfigurationPopup.save_requested.connect( save_favorite_properties )
+		ConfigurationPopup.import_requested.connect( import_favorite_properties )
 	else:
 		ConfigurationPopup.grab_focus()
 		ConfigurationPopup.request_attention()
@@ -128,20 +143,29 @@ func _add_configuration_popup():
 	#ConfigurationPopup.popup_centered()
 
 
-
 func import_favorite_properties():
-	var global_favorite_properties = ConfigFile.new().load(default_plugin_config_dir + default_plugin_config_folder)
-	var local_favorited_properties: ConfigFile = global_favorite_properties
-	local_favorited_properties.save(default_project_config_dir + "/favorite_properties")
+	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
 
+	var global_favorite_properties := ConfigFile.new()
+	global_favorite_properties.load(config_folder + "/favorite_properties")
+	var local_favorited_properties := global_favorite_properties
+	local_favorited_properties.save(default_project_config_dir + "/favorite_properties")
+	print("imported")
 
 
 func save_favorite_properties():
-	var local_favorited_properties = ConfigFile.new().load(default_project_config_dir + "/favorite_properties")
-	#print(local_favorited_properties.get_as_text())
+	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
 
-	var global_favorite_properties: ConfigFile = local_favorited_properties
-	global_favorite_properties.save(default_plugin_config_dir + default_plugin_config_folder)
+	var local_favorited_properties := ConfigFile.new()
+	local_favorited_properties.load(default_project_config_dir + "/favorite_properties")
+	var global_favorite_properties := local_favorited_properties
+	global_favorite_properties.save(plugin_config_path + "/favorite_properties")
+	#print( global_favorite_properties.get_sections() )
+	print("saved")
+
+
 
 
 #func plugin_config_folder_exists():
