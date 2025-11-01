@@ -13,6 +13,10 @@ var EditorMenuBar: MenuBar
 var ProjectMenu: PopupMenu
 
 
+const ConfigFiles = {
+	"favorite_properites": "a"
+}
+
 # Plugin variables
 const default_plugin_config_folder = "/persistant_settings_plugin"
 var plugin_config_dir
@@ -131,8 +135,13 @@ func _add_configuration_popup():
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
 
-		ConfigurationPopup.save_requested.connect( save_favorite_properties )
-		ConfigurationPopup.import_requested.connect( import_favorite_properties )
+		# Connect signals
+		ConfigurationPopup.file_view_requested.connect( _file_view_requested )
+		#ConfigurationPopup.file_import_requested.connect( import_favorite_properties )
+		#ConfigurationPopup.file_save_requested.connect( save_favorite_properties )
+		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
+		ConfigurationPopup.file_save_requested.connect( _file_save_requested )
+		#ConfigurationPopup.file_overwrite_requested.connect( overwrite_favorite_properties )
 	else:
 		ConfigurationPopup.grab_focus()
 		ConfigurationPopup.request_attention()
@@ -166,6 +175,39 @@ func save_favorite_properties():
 	print("saved")
 
 
+func _file_view_requested():
+	#local_favorited_properties.load(default_project_config_dir + "/favorite_properties")
+	#ConfigurationPopup.viewed_file =
+	pass
+
+
+# Imports the specified file to the project's data folder
+func _file_import_requested(file_name: String):
+	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+
+	var global_favorite_properties := ConfigFile.new()
+	var load_result = global_favorite_properties.load(config_folder + "/" + file_name)
+	var local_favorited_properties := global_favorite_properties
+	var save_result = local_favorited_properties.save(default_project_config_dir + "/" + file_name)
+	print("%s imported" % [file_name])
+
+
+# Saves the specified file to the plugin's global data folder
+func _file_save_requested(file_name: String):
+	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+
+	var local_favorited_properties := ConfigFile.new()
+	var load_result = local_favorited_properties.load(default_project_config_dir + "/" + file_name)
+	var global_favorite_properties := local_favorited_properties
+	var save_result = global_favorite_properties.save(plugin_config_path + "/" + file_name)
+	print("%s saved" % [file_name])
+
+
+# Saves the specified file to the plugin's global data folder by overwriting any existing files.
+func _file_overwrite_requested():
+	pass
 
 
 #func plugin_config_folder_exists():
@@ -177,10 +219,6 @@ func save_favorite_properties():
 		#else:
 			#dir.make_dir("persistant_settings_plugin")
 			#dir.open("persistant_settings_plugin")
-
-
-func create_plugin_config_folder():
-	pass
 
 
 func _create_persistant_editor_settings():
