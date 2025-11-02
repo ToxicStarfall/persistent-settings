@@ -34,22 +34,30 @@ func _exit_tree() -> void:
 
 func _initialize_buttons():
 	var WelcomeScreen = %WelcomeScreen
-	WelcomeScreen.get_node("%ImportAllButton").pressed.connect(
-		func():
-			file_import_requested.emit()
-	)
+	WelcomeScreen.get_node("%ImportAllButton").pressed.connect( func(): file_import_requested.emit() )
 	WelcomeScreen.get_node("%ImportPropertiesButton").pressed.connect( func(): file_import_requested.emit() )
 
-	#var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsGroup
-	#var InputSettingsGroup = %BasicScreen/%InputsGroup
-	#var LayerNamesGroup = %BasicScreen/%LayerNamesGroup
-	var file_name = "favorite_properties"
-	var FavoritePropertiesGroup = %FavoritesScreen/%PropertiesGroup
-	FavoritePropertiesGroup.get_node("%ViewButton").pressed.connect( func(): file_view_requested.emit(file_name) )
-	#FavoritePropertiesGroup.get_node("%ImportButton").pressed.connect( func(): file_view_requested.emit(file_name) )
-	FavoritePropertiesGroup.get_node("%SaveButton").pressed.connect( func(): file_save_requested.emit(file_name) )
-	FavoritePropertiesGroup.get_node("%OverwriteButton").pressed.connect( func(): pass )
-	pass
+	var file_name: String
+	var node_path: String
+
+	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
+	var FavoritePropertiesGroup = %BasicScreen/%FavoritePropertiesSection
+	var FavoriteNodesGroup = %BasicScreen/%FavoriteNodesSection
+	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
+
+	#file_name = "favorite_properties"
+	#ProjectSettingsGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	file_name = "favorite_properties"
+	#FavoritePropertiesGroup.get_node("HBoxContainer/ViewButton").pressed.connect( file_view_requested.emit.bind( file_name ))
+	FavoritePropertiesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	file_name = "favorites.Node"
+	FavoriteNodesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	file_name = "favorites"
+	FavoriteFilesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
 
 
 func _on_close_requested() -> void:

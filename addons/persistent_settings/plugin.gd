@@ -200,9 +200,23 @@ func _file_save_requested(file_name: String):
 
 	var local_favorited_properties := ConfigFile.new()
 	var load_result = local_favorited_properties.load(default_project_config_dir + "/" + file_name)
-	var global_favorite_properties := local_favorited_properties
-	var save_result = global_favorite_properties.save(plugin_config_path + "/" + file_name)
-	print("%s saved" % [file_name])
+	if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
+
+	# Detect plain unformatted files (non cfg files)
+	if local_favorited_properties.encode_to_text() == "":
+		# Open as plain file
+		var a = FileAccess.open(default_project_config_dir + "/" + file_name, FileAccess.READ)
+		var b = FileAccess.open(plugin_config_path + "/" + file_name, FileAccess.WRITE_READ)
+		# Save contents as plain text
+		b.store_string( a.get_as_text() )
+		b.close()
+		print("%s saved" % [file_name])
+
+	else:
+		var global_favorite_properties := local_favorited_properties
+		var save_result = global_favorite_properties.save(plugin_config_path + "/" + file_name)
+		if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
+		else:  print("%s saved" % [file_name])
 
 
 # Saves the specified file to the plugin's global data folder by overwriting any existing files.
