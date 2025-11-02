@@ -1,0 +1,244 @@
+[gd_scene load_steps=5 format=3 uid="uid://dywms8oine7jk"]
+
+[ext_resource type="Texture2D" uid="uid://oxnjbtlia5so" path="res://addons/persistent_settings/icons/Collapse.svg" id="1_anpuh"]
+[ext_resource type="Texture2D" uid="uid://bd5r12ej3b4h4" path="res://addons/persistent_settings/icons/GuiVisibilityVisible.svg" id="1_nol76"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cx65v"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.25098, 0.266667, 0.298039, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gyvit"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.25098, 0.266667, 0.298039, 1)
+
+[node name="BasicScreen" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer"]
+layout_mode = 2
+
+[node name="GeneralSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
+bbcode_enabled = true
+text = "[b]General Settings[/b]"
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GeneralSettingsGroup" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+layout_mode = 2
+text = "No settings available."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup/HBoxContainer"]
+layout_mode = 2
+text = "Plugin data location:"
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = ".../Users/Roaming/Godot/persistant_settings_plugin"
+placeholder_text = "Enter a save path"
+
+[node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup/HBoxContainer"]
+layout_mode = 2
+text = "Reset"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+layout_mode = 2
+text = "Automatically import all"
+
+[node name="ProjectSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
+bbcode_enabled = true
+text = "[b]Project Settings[/b]"
+fit_content = true
+
+[node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsLabel"]
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+icon = ExtResource("1_nol76")
+
+[node name="ProjectSettingsMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ProjectSettingsSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+layout_mode = 2
+text = "No settings available."
+fit_content = true
+
+[node name="CollapseButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+visible = false
+layout_mode = 2
+text = "Configure"
+icon = ExtResource("1_anpuh")
+alignment = 0
+
+[node name="FavoritePropertiesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
+bbcode_enabled = true
+text = "[b]Favorite Properties[/b]"
+fit_content = true
+
+[node name="FavoritePropertiesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="FavoritePropertiesSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection"]
+layout_mode = 2
+
+[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "View"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection/HBoxContainer"]
+layout_mode = 2
+text = "Save (overwrite)"
+
+[node name="FavoriteNodesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
+bbcode_enabled = true
+text = "[b]Favorite Nodes[/b]"
+fit_content = true
+
+[node name="FavoriteNodesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="FavoriteNodesSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection"]
+layout_mode = 2
+
+[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "View"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection/HBoxContainer"]
+layout_mode = 2
+text = "Save (overwrite)"
+
+[node name="FavoriteFilesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
+bbcode_enabled = true
+text = "[b]Favorite Files[/b]"
+fit_content = true
+
+[node name="FavoriteFilesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="FavoriteFilesSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection"]
+layout_mode = 2
+
+[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "View"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection/HBoxContainer"]
+layout_mode = 2
+text = "Save (overwrite)"
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VSplitContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/Panel"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
+bbcode_enabled = true
+text = "[b]File Viewer[/b]"
+fit_content = true
+
+[node name="RawViewer" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_content = true
