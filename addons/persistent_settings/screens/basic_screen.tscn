@@ -1,6 +1,5 @@
 [gd_scene load_steps=5 format=3 uid="uid://dywms8oine7jk"]
 
-[ext_resource type="Texture2D" uid="uid://oxnjbtlia5so" path="res://addons/persistent_settings/icons/Collapse.svg" id="1_anpuh"]
 [ext_resource type="Texture2D" uid="uid://bd5r12ej3b4h4" path="res://addons/persistent_settings/icons/GuiVisibilityVisible.svg" id="1_nol76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cx65v"]
@@ -9,6 +8,8 @@ content_margin_top = 3.0
 content_margin_right = 8.0
 content_margin_bottom = 3.0
 bg_color = Color(0.25098, 0.266667, 0.298039, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_anpuh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gyvit"]
 content_margin_left = 8.0
@@ -84,7 +85,8 @@ placeholder_text = "Enter a save path"
 layout_mode = 2
 text = "Reset"
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+[node name="AutoImportCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+visible = false
 layout_mode = 2
 text = "Automatically import all"
 
@@ -122,6 +124,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+visible = false
 layout_mode = 2
 text = "No settings available."
 fit_content = true
@@ -130,8 +133,24 @@ fit_content = true
 visible = false
 layout_mode = 2
 text = "Configure"
-icon = ExtResource("1_anpuh")
+icon = SubResource("CompressedTexture2D_anpuh")
 alignment = 0
+
+[node name="MetadataCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+layout_mode = 2
+text = "Include project metadata"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+layout_mode = 2
+
+[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "View"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection/HBoxContainer"]
+layout_mode = 2
+text = "Save (overwrite)"
 
 [node name="FavoritePropertiesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
 layout_mode = 2

@@ -65,12 +65,10 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 layout_mode = 2
 current_tab = 0
-tab_count = 3
+tab_count = 2
 tab_0/title = "Welcome"
 tab_1/title = "Basic"
 tab_1/tooltip = "View basic settings"
-tab_2/title = "Favorites"
-tab_2/tooltip = "View favorites"
 
 [node name="BackgroundColor" type="ColorRect" parent="MarginContainer/VBoxContainer/TabBar"]
 show_behind_parent = true
