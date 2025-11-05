@@ -106,6 +106,17 @@ func _initialize_plugin_data():
 			dir.open("persistant_settings_plugin")
 
 	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+	#print(config_folder + "/plugin_settings.cfg")
+	#print(plugin_settings.encode_to_text())
+	#var a = FileAccess.open(config_folder + "/plugin_settings.cfg", FileAccess.READ)
+	#print(a.get_as_text())
+	#var b = ConfigFile.new()
+	#print(b.load(config_folder + "/plugin_settings.cfg"))
+	#print(b.encode_to_text())
+	#print(b.get_sections())
+	#print(")
+	#print(plugin_settings.get_value("General", "welcome_message", false))
+
 	if plugin_settings.load(config_folder + "/plugin_settings.cfg") != Error.OK:
 		_create_plugin_settings()
 
@@ -118,7 +129,7 @@ func _create_plugin_settings():
 	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
 	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
 
-	const default_import_options = {
+	var default_import_options = {
 		project_settings = true,
 		favorite_properties = true,
 		favorite_nodes = true,
@@ -128,7 +139,7 @@ func _create_plugin_settings():
 		recent_objects = false,
 		recent_directories = false,
 	}
-	const default_save_options = {
+	var default_save_options = {
 		project_settings = true,
 		favorite_properties = true,
 		favorite_nodes = true,
@@ -139,11 +150,9 @@ func _create_plugin_settings():
 		recent_directories = false,
 	}
 	plugin_settings.set_value("General", "import_options", default_import_options)
+	plugin_settings.set_value("General", "save_options", default_save_options)
 	plugin_settings.save(config_folder + "/plugin_settings.cfg")
-
-
-func _apply_plugin_settings():
-	pass
+	#print(plugin_settings.encode_to_text())
 
 
 func _add_plugin_nodes():
@@ -162,8 +171,8 @@ func _add_configuration_popup():
 		ConfigurationPopup = configuration_popup_scene.instantiate()
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
-		ConfigurationPopup.apply_plugin_settings(plugin_settings)
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+		ConfigurationPopup.apply_plugin_settings(plugin_settings)
 
 		# Connect signals
 		ConfigurationPopup.file_view_requested.connect( _file_view_requested )
@@ -172,6 +181,7 @@ func _add_configuration_popup():
 		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
 		ConfigurationPopup.file_save_requested.connect( _file_save_requested )
 		#ConfigurationPopup.file_overwrite_requested.connect( overwrite_favorite_properties )
+		ConfigurationPopup.plugin_settings_saved.connect( _save_plugin_settings )
 	else:
 		ConfigurationPopup.grab_focus()
 		ConfigurationPopup.request_attention()
@@ -225,15 +235,16 @@ func _file_save_requested(files, save_path: String = ""):
 		if file_name == "project.godot":
 			_save_project_settings()
 			continue
-		if file_name == "plugin_settings.cfg":
-			_save_plugin_settings()
-			continue
+		#if file_name == "plugin_settings.cfg":
+			#_save_plugin_settings()
+			#continue
 
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load(default_project_config_dir + "/" + file_name)
 		if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
 
 		# Detect plain unformatted files (non cfg files)
+		# plain files return error as empty string when attempting to encode to text
 		if local_file.encode_to_text() == "":
 			# Open as plain file
 			var a = FileAccess.open(default_project_config_dir + "/" + file_name, FileAccess.READ)
@@ -244,8 +255,6 @@ func _file_save_requested(files, save_path: String = ""):
 			print("%s saved" % [file_name])
 
 		else:
-			if file_name == "project.godot":
-				print("AJNKSD")
 			var global_file := local_file
 			var save_result = global_file.save(plugin_config_path + "/" + file_name)
 			if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
@@ -283,8 +292,16 @@ func _save_project_settings():
 		else:  print("%s saved" % ["project.godot"])
 
 
-func _save_plugin_settings():
-	pass
+func _save_plugin_settings(ImportOptions: Control, SaveOptions: Control):
+	for import_option_name in ImportOptions.get_children():
+	#for import_option_name in plugin_settings.import_options:
+	#for import_option_name in plugin_settings.import_options:
+		#if import_option_name.to_lower() == ImportOptions.get_node( import_option_name.replace("_", "")):
+		#if import_option_name.to_lower() == plugin_settings.import_options.has
+		#if plugin_settings.import_options.has( import_option_name.to_lower() )
+			#pass
+
+		pass
 
 
 #func plugin_config_folder_exists():

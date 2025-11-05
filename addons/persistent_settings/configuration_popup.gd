@@ -7,12 +7,13 @@ signal file_save_requested
 signal file_import_requested
 signal file_view_requested
 
+signal plugin_settings_saved
 
 var viewed_file
 
 
 #func _init() -> void:
-	#print("init")
+	#pass
 #
 #func _ready():
 	#print("hello")
@@ -40,6 +41,8 @@ func _connect_buttons():
 		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
 	WelcomeScreen.get_node("%SaveAllButton").pressed.connect( file_save_requested.emit
 		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
+	WelcomeScreen.get_node("%ApplyButton").pressed.connect( plugin_settings_saved.emit
+		.bind( ImportOptions, SaveOptions ))
 	#WelcomeScreen.get_node("%ImportPropertiesButton").pressed.connect( file_import_requested.emit
 		#.bind("favorite_properties") )
 
@@ -100,18 +103,21 @@ func _on_close_requested() -> void:
 
 
 func apply_plugin_settings(plugin_settings: ConfigFile):
-	var PluginSettings = plugin_settings
-
 	var WelcomeScreen = %WelcomeScreen
 	var ImportOptions = WelcomeScreen.get_node("%ImportOptions")
 	var SaveOptions = WelcomeScreen.get_node("%SaveOptions")
 
-	#for i in PluginSettings.get_value("General", "import_options", {}).entries():
-		#ImportOptions.get_node(i + "/CheckBox").button_pressed = PluginSettings.get_value("General", "import_options", {})[i]
-	ImportOptions.get_node("ProjectSettings/CheckBox").button_pressed = PluginSettings.get_value("General", "import_options", {}).project_settings
+	for import_option in plugin_settings.get_value("General", "import_options", {}).keys():
+		if ImportOptions.has_node(import_option + "/CheckBox"):
+			ImportOptions.get_node(import_option + "/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {})[import_option]
+	for save_options in plugin_settings.get_value("General", "save_options", {}).keys():
+		if SaveOptions.has_node(save_options + "/CheckBox"):
+			SaveOptions.get_node(save_options + "/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {})[save_options]
+
+	#ImportOptions.get_node("ProjectSettings/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {}).project_settings
 
 	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
-	ProjectSettingsGroup.get_node("MetadataCheckBox").button_pressed = PluginSettings.get_value("ProjectSettings", "metadata", false)
+	ProjectSettingsGroup.get_node("MetadataCheckBox").button_pressed = plugin_settings.get_value("ProjectSettings", "metadata", false)
 	#ProjectSettingsGroup.get_node("HBoxContainer/SaveButton")
 
 	var FavoritePropertiesGroup = %BasicScreen/%FavoritePropertiesSection
