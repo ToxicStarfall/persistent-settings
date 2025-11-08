@@ -6,10 +6,10 @@ signal file_save_requested
 #signal file_overwrite_requested
 signal file_import_requested
 signal file_view_requested
-
 signal plugin_settings_saved
 
 var viewed_file
+var plugin_settings: ConfigFile
 
 
 #func _init() -> void:
@@ -33,43 +33,8 @@ func _exit_tree() -> void:
 
 # Connect option button signals
 func _connect_buttons():
-	var WelcomeScreen = %WelcomeScreen
-	var ImportOptions = WelcomeScreen.get_node("%ImportOptions")
-	var SaveOptions = WelcomeScreen.get_node("%SaveOptions")
-
-	WelcomeScreen.get_node("%ImportAllButton").pressed.connect( file_import_requested.emit
-		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
-	WelcomeScreen.get_node("%SaveAllButton").pressed.connect( file_save_requested.emit
-		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
-	WelcomeScreen.get_node("%ApplyButton").pressed.connect( plugin_settings_saved.emit
-		.bind( ImportOptions, SaveOptions ))
-	#WelcomeScreen.get_node("%ImportPropertiesButton").pressed.connect( file_import_requested.emit
-		#.bind("favorite_properties") )
-
-	#WelcomeScreen.get_node("%SaveOptions/ProjectSettings/Button").pressed.connect( file_save_requested.emit
-		#.bind( "project.godot",  ) )
-
-	var file_name: String
-	var node_path: String
-
-	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
-	var FavoritePropertiesGroup = %BasicScreen/%FavoritePropertiesSection
-	var FavoriteNodesGroup = %BasicScreen/%FavoriteNodesSection
-	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
-
-	file_name = "project.godot"
-	#ProjectSettingsGroup.get_node("MetadataCheckBox").pressed.connect()
-	ProjectSettingsGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
-
-	file_name = "favorite_properties"
-	#FavoritePropertiesGroup.get_node("HBoxContainer/ViewButton").pressed.connect( file_view_requested.emit.bind( file_name ))
-	FavoritePropertiesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
-
-	file_name = "favorites.Node"
-	FavoriteNodesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
-
-	file_name = "favorites"
-	FavoriteFilesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+	_initialize_welcome_screen()
+	_initialize_general_screen()
 
 
 # Disconnects signals to prevent errors within editor while editing scenes.
@@ -96,6 +61,71 @@ func _disconnect_buttons():
 	pass
 
 
+func _initialize_welcome_screen():
+	var WelcomeScreen = %WelcomeScreen
+	var ImportOptions = WelcomeScreen.get_node("%ImportOptions")
+	var SaveOptions = WelcomeScreen.get_node("%SaveOptions")
+
+	WelcomeScreen.get_node("%ImportAllButton").pressed.connect( file_import_requested.emit
+		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
+	WelcomeScreen.get_node("%SaveAllButton").pressed.connect( file_save_requested.emit
+		.bind( ["project.godot", "favorite_properties", "favorites.Node", "favorites"] ))
+	WelcomeScreen.get_node("%ApplyButton").pressed.connect( plugin_settings_saved.emit
+		.bind( ImportOptions, SaveOptions ))
+
+	#WelcomeScreen.get_node("%ImportPropertiesButton").pressed.connect( file_import_requested.emit
+		#.bind("favorite_properties") )
+	#WelcomeScreen.get_node("%SaveOptions/ProjectSettings/Button").pressed.connect( file_save_requested.emit
+		#.bind( "project.godot",  ) )
+	var import_options: Dictionary = plugin_settings.get_value("General", "import_options", {})
+	for i in import_options.keys():
+		var checkbox = ImportOptions.get_node(i)
+		checkbox.pressed.connect( func(): import_options.set(checkbox.name, checkbox.button_pressed ))
+	var save_options: Dictionary = plugin_settings.get_value("General", "save_options", {})
+	for i in save_options.keys():
+		var checkbox = SaveOptions.get_node(i)
+		checkbox.pressed.connect( func(): save_options.set(checkbox.name, checkbox.button_pressed ))
+
+	ImportOptions.get_node("project_settings/Button").pressed.connect( file_import_requested.emit.bind("project.godot"))
+	ImportOptions.get_node("favorite_properties/Button").pressed.connect( file_import_requested.emit.bind("favorite_properties"))
+	ImportOptions.get_node("favorite_nodes/Button").pressed.connect( file_import_requested.emit.bind("favorites.Node"))
+	ImportOptions.get_node("favorite_files/Button").pressed.connect( file_import_requested.emit.bind("favorites"))
+
+	SaveOptions.get_node("project_settings/Button").pressed.connect( file_save_requested.emit.bind("project.godot"))
+	SaveOptions.get_node("favorite_properties/Button").pressed.connect( file_save_requested.emit.bind("favorite_properties"))
+	SaveOptions.get_node("favorite_nodes/Button").pressed.connect( file_save_requested.emit.bind("favorites.Node"))
+	SaveOptions.get_node("favorite_files/Button").pressed.connect( file_save_requested.emit.bind("favorites"))
+
+	WelcomeScreen.get_node("%popup_on_launch").pressed.connect( func():
+		plugin_settings.set_value("General", "popup_on_launch", WelcomeScreen.get_node("%popup_on_launch").button_pressed )
+		plugin_settings_saved.emit() )
+
+
+func _initialize_general_screen():
+	var file_name: String
+	var node_path: String
+
+	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
+	var FavoritePropertiesGroup = %BasicScreen/%FavoritePropertiesSection
+	var FavoriteNodesGroup = %BasicScreen/%FavoriteNodesSection
+	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
+
+	#file_name = "project.godot"
+	plugin_settings.set_value("General", "popup_on_launch", ProjectSettingsGroup.get_node("MetadataCheckBox").button_pressed )
+	#ProjectSettingsGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	#file_name = "favorite_properties"
+	#FavoritePropertiesGroup.get_node("HBoxContainer/ViewButton").pressed.connect( file_view_requested.emit.bind( file_name ))
+	#FavoritePropertiesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	#file_name = "favorites.Node"
+	#FavoriteNodesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+
+	#file_name = "favorites"
+	#FavoriteFilesGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
+	%ApplyButton.pressed.connect( plugin_settings_saved.emit.bind())
+
+
 func _on_close_requested() -> void:
 	#print("close")
 	#hide()
@@ -112,9 +142,8 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 			ImportOptions.get_node(import_option + "/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {})[import_option]
 	for save_options in plugin_settings.get_value("General", "save_options", {}).keys():
 		if SaveOptions.has_node(save_options + "/CheckBox"):
-			SaveOptions.get_node(save_options + "/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {})[save_options]
-
-	#ImportOptions.get_node("ProjectSettings/CheckBox").button_pressed = plugin_settings.get_value("General", "import_options", {}).project_settings
+			SaveOptions.get_node(save_options + "/CheckBox").button_pressed = plugin_settings.get_value("General", "save_options", {})[save_options]
+	#WelcomeScreen.get_node("%popup_on_launch").buttong-
 
 	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
 	ProjectSettingsGroup.get_node("MetadataCheckBox").button_pressed = plugin_settings.get_value("ProjectSettings", "metadata", false)

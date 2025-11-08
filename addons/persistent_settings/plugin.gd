@@ -29,6 +29,10 @@ var ConfigurationPopup: Window
 var PopupButton: Button = Button.new()
 
 
+func _disable_plugin() -> void:
+	print("disanled")
+
+
 func _enter_tree() -> void:
 	_initialize_editor_variables()
 	_initialize_plugin_variables()
@@ -49,9 +53,12 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
+	print("exietd")
 	_remove_plugin_nodes()
 
+	print(ConfigurationPopup)
 	if ConfigurationPopup:  ConfigurationPopup.queue_free()
+	print(ConfigurationPopup)
 
 	#if main_panel_instance:
 		#main_panel_instance.queue_free()
@@ -120,7 +127,7 @@ func _initialize_plugin_data():
 	if plugin_settings.load(config_folder + "/plugin_settings.cfg") != Error.OK:
 		_create_plugin_settings()
 
-	if plugin_settings.get_value("General", "welcome_message", false) == false:
+	if plugin_settings.get_value("General", "popup_on_launch", false) == false:
 		_add_configuration_popup()
 	#_apply_plugin_settings()
 
@@ -171,17 +178,17 @@ func _add_configuration_popup():
 		ConfigurationPopup = configuration_popup_scene.instantiate()
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
+		#ConfigurationPopup.plugin_settings = plugin_settings
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+		print(ConfigurationPopup)
 		ConfigurationPopup.apply_plugin_settings(plugin_settings)
 
 		# Connect signals
 		ConfigurationPopup.file_view_requested.connect( _file_view_requested )
-		#ConfigurationPopup.file_import_requested.connect( import_favorite_properties )
-		#ConfigurationPopup.file_save_requested.connect( save_favorite_properties )
 		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
 		ConfigurationPopup.file_save_requested.connect( _file_save_requested )
-		#ConfigurationPopup.file_overwrite_requested.connect( overwrite_favorite_properties )
-		ConfigurationPopup.plugin_settings_saved.connect( _save_plugin_settings )
+		#ConfigurationPopup.file_overwrite_requested.connect( _on_file_overwrite_requested )
+		ConfigurationPopup.plugin_settings_saved.connect( _on_plugin_settings_saved )
 	else:
 		ConfigurationPopup.grab_focus()
 		ConfigurationPopup.request_attention()
@@ -292,16 +299,22 @@ func _save_project_settings():
 		else:  print("%s saved" % ["project.godot"])
 
 
-func _save_plugin_settings(ImportOptions: Control, SaveOptions: Control):
-	for import_option_name in ImportOptions.get_children():
-	#for import_option_name in plugin_settings.import_options:
-	#for import_option_name in plugin_settings.import_options:
-		#if import_option_name.to_lower() == ImportOptions.get_node( import_option_name.replace("_", "")):
-		#if import_option_name.to_lower() == plugin_settings.import_options.has
-		#if plugin_settings.import_options.has( import_option_name.to_lower() )
-			#pass
+func _on_plugin_settings_saved(ImportOptions: Control = null, SaveOptions: Control = null):
+	#if ImportOptions and SaveOptions:
+		#var import_options = plugin_settings.get_value("General", "import_options", {})
+		#for option in import_options.keys():
+			#if ImportOptions.has_node(NodePath(option)):
+				#import_options[option] = ImportOptions.get_node(option + "/CheckBox").button_pressed#plugin_settings.set_value("General", "import_options", ImportOptions.get_node(import_option + "/CheckBox").button_pressed)
+		#plugin_settings.set_value("General", "import_options", import_options)
+#
+		#var save_options = plugin_settings.get_value("General", "save_options", {})
+		#for option in save_options.keys():
+			#if SaveOptions.has_node(NodePath(option)):
+				#save_options[option] = SaveOptions.get_node(option + "/CheckBox").button_pressed#plugin_settings.set_value("General", "import_options", ImportOptions.get_node(import_option + "/CheckBox").button_pressed)
+		#plugin_settings.set_value("General", "save_options", save_options)
 
-		pass
+	plugin_settings.save(plugin_config_path + "/plugin_settings.cfg")
+	#print(plugin_settings.get_value("General", "import_options", {}))
 
 
 #func plugin_config_folder_exists():
