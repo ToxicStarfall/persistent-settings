@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dywms8oine7jk"]
+[gd_scene load_steps=7 format=3 uid="uid://dywms8oine7jk"]
 
 [ext_resource type="Texture2D" uid="uid://bd5r12ej3b4h4" path="res://addons/persistent_settings/icons/GuiVisibilityVisible.svg" id="1_nol76"]
 
@@ -17,6 +17,9 @@ content_margin_top = 2.0
 content_margin_right = 8.0
 content_margin_bottom = 2.0
 bg_color = Color(0.25098, 0.266667, 0.298039, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_anpuh"]
+color = Color(0.4, 0.4, 0.4, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anpuh"]
 bg_color = Color(0.211765, 0.239216, 0.290196, 1)
@@ -72,6 +75,7 @@ text = "No settings available."
 fit_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup/HBoxContainer"]
@@ -139,8 +143,9 @@ text = "Configure"
 icon = SubResource("CompressedTexture2D_anpuh")
 alignment = 0
 
-[node name="MetadataCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
+[node name="IncludeMetadataCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
 layout_mode = 2
+tooltip_text = "Include per project specific data, such as the project's name, run configurations, or enabled plugins when importing and saving."
 text = "Include project metadata"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
@@ -249,6 +254,16 @@ text = "View"
 layout_mode = 2
 text = "Save (overwrite)"
 
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_anpuh")
+
+[node name="ApplyButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Apply Changes"
+
 [node name="Panel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VSplitContainer"]
 visible = false
 layout_mode = 2
@@ -270,12 +285,7 @@ layout_mode = 2
 fit_content = true
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/ScrollContainer/VSplitContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_anpuh")
-
-[node name="ApplyButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/PanelContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-text = "Apply Changes"

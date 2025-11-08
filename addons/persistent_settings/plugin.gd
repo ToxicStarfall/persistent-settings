@@ -20,6 +20,12 @@ var plugin_config_path: String
 
 var plugin_settings: ConfigFile = ConfigFile.new()
 
+const FileNames = {
+	"project_settings": "project.godot",
+	"favorite_properties": "favorite_properties",
+	"favorite_nodes": "favorites.Node",
+	"favorite_files": "favorites",
+}
 
 # Plugin nodes
 # ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
@@ -178,9 +184,9 @@ func _add_configuration_popup():
 		ConfigurationPopup = configuration_popup_scene.instantiate()
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
-		#ConfigurationPopup.plugin_settings = plugin_settings
+		ConfigurationPopup.plugin_settings = plugin_settings
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
-		print(ConfigurationPopup)
+		#print(ConfigurationPopup)
 		ConfigurationPopup.apply_plugin_settings(plugin_settings)
 
 		# Connect signals
