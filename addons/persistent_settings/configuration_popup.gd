@@ -11,6 +11,8 @@ signal plugin_settings_saved
 var viewed_file
 var plugin_settings: ConfigFile
 
+var active: bool = false
+
 const FileConstants = {
 	"project_settings": "project.godot",
 	"favorite_properties": "favorite_properties",
@@ -27,14 +29,20 @@ const FileConstants = {
 
 
 func _enter_tree() -> void:
-	_connect_buttons()
-	#close_requested.connect( func(): hide() )
-	%TabBar.tab_changed.connect( _on_tab_changed )
+	# Prevent running script if the scene is being edited
+	if !EditorInterface.get_edited_scene_root() == self:
+		active = true
+		#print("hi")
+		#print("config popup tree entered")
+		_connect_buttons()
+		#close_requested.connect( func(): hide() )
+		%TabBar.tab_changed.connect( _on_tab_changed )
 
 
 func _exit_tree() -> void:
-	_disconnect_buttons()
-	#print("exit")
+	if active:
+		active = false
+		_disconnect_buttons()
 
 
 # Connect option button signals
