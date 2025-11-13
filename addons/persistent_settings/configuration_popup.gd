@@ -72,6 +72,7 @@ func _disconnect_buttons():
 
 
 func _initialize_welcome_screen():
+	#print("welcome")
 	var WelcomeScreen = %WelcomeScreen
 	var ImportOptions = WelcomeScreen.get_node("%ImportOptions")
 	var SaveOptions = WelcomeScreen.get_node("%SaveOptions")
@@ -95,10 +96,7 @@ func _initialize_welcome_screen():
 	WelcomeScreen.get_node("%ApplyButton").pressed.connect( plugin_settings_saved.emit
 		.bind()) #ImportOptions, SaveOptions ))
 
-	#WelcomeScreen.get_node("%ImportPropertiesButton").pressed.connect( file_import_requested.emit
-		#.bind("favorite_properties") )
-	#WelcomeScreen.get_node("%SaveOptions/ProjectSettings/Button").pressed.connect( file_save_requested.emit
-		#.bind( "project.godot",  ) )
+	#print(plugin_settings)
 	var import_options: Dictionary = plugin_settings.get_value("General", "import_options", {})
 	for i in import_options.keys():
 		if ImportOptions.has_node(NodePath(i)):# + "/CheckBox")):
@@ -106,6 +104,9 @@ func _initialize_welcome_screen():
 			group.get_node("CheckBox").pressed.connect( func():
 				import_options[group.name] = group.get_node("CheckBox").button_pressed
 				plugin_settings.set_value("General", "import_options", import_options))
+			group.get_node("Button").pressed.connect( file_import_requested.emit
+				.bind( FileConstants.get(group.name) ))
+
 	var save_options: Dictionary = plugin_settings.get_value("General", "save_options", {})
 	for i in save_options.keys():
 		if SaveOptions.has_node(NodePath(i)):# + "/CheckBox")):
@@ -113,16 +114,18 @@ func _initialize_welcome_screen():
 			group.get_node("CheckBox").pressed.connect( func():
 				save_options[group.name] = group.get_node("CheckBox").button_pressed
 				plugin_settings.set_value("General", "save_options", save_options))
+			group.get_node("Button").pressed.connect( file_save_requested.emit
+				.bind( FileConstants.get(group.name) ))
 
-	ImportOptions.get_node("project_settings/Button").pressed.connect( file_import_requested.emit.bind("project.godot"))
-	ImportOptions.get_node("favorite_properties/Button").pressed.connect( file_import_requested.emit.bind("favorite_properties"))
-	ImportOptions.get_node("favorite_nodes/Button").pressed.connect( file_import_requested.emit.bind("favorites.Node"))
-	ImportOptions.get_node("favorite_files/Button").pressed.connect( file_import_requested.emit.bind("favorites"))
+	#ImportOptions.get_node("project_settings/Button").pressed.connect( file_import_requested.emit.bind("project.godot"))
+	#ImportOptions.get_node("favorite_properties/Button").pressed.connect( file_import_requested.emit.bind("favorite_properties"))
+	#ImportOptions.get_node("favorite_nodes/Button").pressed.connect( file_import_requested.emit.bind("favorites.Node"))
+	#ImportOptions.get_node("favorite_files/Button").pressed.connect( file_import_requested.emit.bind("favorites"))
 
-	SaveOptions.get_node("project_settings/Button").pressed.connect( file_save_requested.emit.bind("project.godot"))
-	SaveOptions.get_node("favorite_properties/Button").pressed.connect( file_save_requested.emit.bind("favorite_properties"))
-	SaveOptions.get_node("favorite_nodes/Button").pressed.connect( file_save_requested.emit.bind("favorites.Node"))
-	SaveOptions.get_node("favorite_files/Button").pressed.connect( file_save_requested.emit.bind("favorites"))
+	#SaveOptions.get_node("project_settings/Button").pressed.connect( file_save_requested.emit.bind("project.godot"))
+	#SaveOptions.get_node("favorite_properties/Button").pressed.connect( file_save_requested.emit.bind("favorite_properties"))
+	#SaveOptions.get_node("favorite_nodes/Button").pressed.connect( file_save_requested.emit.bind("favorites.Node"))
+	#SaveOptions.get_node("favorite_files/Button").pressed.connect( file_save_requested.emit.bind("favorites"))
 
 	WelcomeScreen.get_node("%popup_on_launch").pressed.connect( func():
 		plugin_settings.set_value("General", "popup_on_launch", WelcomeScreen.get_node("%popup_on_launch").button_pressed )
