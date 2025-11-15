@@ -1,0 +1,126 @@
+[gd_scene load_steps=4 format=3 uid="uid://7qrou4j20yq3"]
+
+[ext_resource type="Texture2D" uid="uid://bd5r12ej3b4h4" path="res://addons/persistent_settings/icons/GuiVisibilityVisible.svg" id="1_pb0aj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cx65v"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.25098, 0.266667, 0.298039, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_anpuh"]
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="DataScreen" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DataManagementLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
+bbcode_enabled = true
+text = "[b]Data Management[/b]"
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GeneralSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="NoSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings"]
+visible = false
+layout_mode = 2
+text = "No settings available."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings/HBoxContainer"]
+layout_mode = 2
+text = "Plugin data location:"
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = ".../Users/Roaming/Godot/persistant_settings_plugin"
+placeholder_text = "Enter a save path"
+
+[node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings/HBoxContainer"]
+layout_mode = 2
+text = "Reset"
+
+[node name="ProjectSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
+bbcode_enabled = true
+text = "[b]Project Settings[/b]"
+fit_content = true
+
+[node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/ProjectSettingsLabel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+icon = ExtResource("1_pb0aj")
+
+[node name="ProjectSettingsMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ProjectSettingsSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/ProjectSettingsMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_anpuh")
+
+[node name="ApplyButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Apply Changes"

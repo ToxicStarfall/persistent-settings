@@ -329,6 +329,7 @@ size_flags_horizontal = 4
 text = "Apply Changes"
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ofygl")
 

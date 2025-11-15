@@ -118,29 +118,27 @@ func _initialize_welcome_screen():
 				.bind( FileConstants.get(group.name) ))
 
 	#ImportOptions.get_node("project_settings/Button").pressed.connect( file_import_requested.emit.bind("project.godot"))
-	#ImportOptions.get_node("favorite_properties/Button").pressed.connect( file_import_requested.emit.bind("favorite_properties"))
-	#ImportOptions.get_node("favorite_nodes/Button").pressed.connect( file_import_requested.emit.bind("favorites.Node"))
-	#ImportOptions.get_node("favorite_files/Button").pressed.connect( file_import_requested.emit.bind("favorites"))
-
 	#SaveOptions.get_node("project_settings/Button").pressed.connect( file_save_requested.emit.bind("project.godot"))
-	#SaveOptions.get_node("favorite_properties/Button").pressed.connect( file_save_requested.emit.bind("favorite_properties"))
-	#SaveOptions.get_node("favorite_nodes/Button").pressed.connect( file_save_requested.emit.bind("favorites.Node"))
-	#SaveOptions.get_node("favorite_files/Button").pressed.connect( file_save_requested.emit.bind("favorites"))
 
-	WelcomeScreen.get_node("%popup_on_launch").pressed.connect( func():
-		plugin_settings.set_value("General", "popup_on_launch", WelcomeScreen.get_node("%popup_on_launch").button_pressed )
-		plugin_settings_saved.emit() )
+	#WelcomeScreen.get_node("%popup_on_launch").pressed.connect( func():
+		#plugin_settings.set_value("General", "popup_on_launch", WelcomeScreen.get_node("%popup_on_launch").button_pressed )
+		#plugin_settings_saved.emit() )
 
 
 func _initialize_general_screen():
 	var file_name: String
 	var node_path: String
 
+	var GeneralSettingsGroup = %BasicScreen/%GeneralSettingsGroup
 	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
 	var FavoritePropertiesGroup = %BasicScreen/%FavoritePropertiesSection
 	var FavoriteNodesGroup = %BasicScreen/%FavoriteNodesSection
 	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
 
+	GeneralSettingsGroup.get_node("auto_import").pressed.connect( func():
+		plugin_settings.set_value("General", "auto_import", GeneralSettingsGroup.get_node("auto_import").button_pressed))
+	GeneralSettingsGroup.get_node("show_on_launch").pressed.connect( func():
+		plugin_settings.set_value("General", "show_on_launch", GeneralSettingsGroup.get_node("show_on_launch").button_pressed))
 	#file_name = "project.godot"
 	#plugin_settings.set_value("ProjectSettings", "include_metadata", ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").button_pressed )
 	#ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").pressed.connect( plugin_settings.set_value
@@ -178,7 +176,11 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 	for save_options in plugin_settings.get_value("General", "save_options", {}).keys():
 		if SaveOptions.has_node(save_options + "/CheckBox"):
 			SaveOptions.get_node(save_options + "/CheckBox").button_pressed = plugin_settings.get_value("General", "save_options", {})[save_options]
-	#WelcomeScreen.get_node("%popup_on_launch").buttong-
+
+
+	var GeneralSettingsGroup = %BasicScreen/%GeneralSettingsGroup
+	GeneralSettingsGroup.get_node("auto_import").button_pressed = plugin_settings.get_value("General", "auto_import", false)
+	GeneralSettingsGroup.get_node("show_on_launch").button_pressed = plugin_settings.get_value("General", "show_on_launch", false)
 
 	var ProjectSettingsGroup = %BasicScreen/%ProjectSettingsSection
 	ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").button_pressed = plugin_settings.get_value("ProjectSettings", "include_metadata", false)

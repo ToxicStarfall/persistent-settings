@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://chgunnmmqhblj"]
+[gd_scene load_steps=5 format=3 uid="uid://chgunnmmqhblj"]
 
 [ext_resource type="Script" uid="uid://c48yp8ptwpur" path="res://addons/persistent_settings/configuration_popup.gd" id="1_rih0t"]
 [ext_resource type="PackedScene" uid="uid://4m5hnwa6eiko" path="res://addons/persistent_settings/screens/welcome_screen.tscn" id="2_qds54"]
 [ext_resource type="PackedScene" uid="uid://dywms8oine7jk" path="res://addons/persistent_settings/screens/basic_screen.tscn" id="3_8jt1d"]
-[ext_resource type="PackedScene" uid="uid://bngpxdhnu3d4b" path="res://addons/persistent_settings/screens/favorites_screen.tscn" id="4_qds54"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rih0t"]
 bg_color = Color(0.211765, 0.239216, 0.290196, 1)
@@ -108,11 +107,6 @@ unique_name_in_owner = true
 layout_mode = 1
 
 [node name="BasicScreen" parent="MarginContainer/VBoxContainer/Screens" instance=ExtResource("3_8jt1d")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-
-[node name="FavoritesScreen" parent="MarginContainer/VBoxContainer/Screens" instance=ExtResource("4_qds54")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

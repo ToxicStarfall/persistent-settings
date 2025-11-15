@@ -4,8 +4,8 @@ extends EditorPlugin
 
 # Editor variables
 const default_project_config_dir: String = "res://.godot/editor"
-var default_editor_config_dir: String
-var default_plugin_config_dir: String
+var default_editor_config_dir: String  # Set in _initialize_editor_variables()
+var default_plugin_config_dir: String  # Set in _initialize_editor_variables()
 
 # Editor nodes
 var EditorToolbar
@@ -59,12 +59,12 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	print("exietd")
+	#print("exietd")
 	_remove_plugin_nodes()
 
-	print(ConfigurationPopup)
+	#print(ConfigurationPopup)
 	if ConfigurationPopup:  ConfigurationPopup.queue_free()
-	print(ConfigurationPopup)
+	#print(ConfigurationPopup)
 
 	#if main_panel_instance:
 		#main_panel_instance.queue_free()
@@ -133,7 +133,7 @@ func _initialize_plugin_data():
 	if plugin_settings.load(config_folder + "/plugin_settings.cfg") != Error.OK:
 		_create_plugin_settings()
 
-	if plugin_settings.get_value("General", "popup_on_launch", false) == false:
+	if plugin_settings.get_value("General", "show_on_launch", false) == true:
 		_add_configuration_popup()
 	#_apply_plugin_settings()
 
