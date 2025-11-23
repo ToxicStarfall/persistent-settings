@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dywms8oine7jk"]
+[gd_scene load_steps=7 format=3 uid="uid://dywms8oine7jk"]
 
+[ext_resource type="Texture2D" uid="uid://bbjmpw6s22c6w" path="res://addons/persistent_settings/icons/Folder.svg" id="1_3ynh0"]
 [ext_resource type="Texture2D" uid="uid://bd5r12ej3b4h4" path="res://addons/persistent_settings/icons/GuiVisibilityVisible.svg" id="1_nol76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cx65v"]
@@ -91,6 +92,12 @@ placeholder_text = "Enter a save path"
 layout_mode = 2
 text = "Reset"
 
+[node name="ViewFolderButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "View Folder"
+icon = ExtResource("1_3ynh0")
+
 [node name="auto_import" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
 visible = false
 layout_mode = 2
@@ -98,6 +105,7 @@ text = "Auto import settings"
 
 [node name="show_on_launch" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
 layout_mode = 2
+tooltip_text = "Show this popup when launching the project."
 text = "Show on project launch"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]

@@ -16,7 +16,6 @@ var ProjectMenu: PopupMenu
 const default_plugin_config_folder: String = "/persistant_settings_plugin"
 var plugin_config_dir: String
 var plugin_config_folder: String
-var plugin_config_path: String
 
 var plugin_settings: ConfigFile = ConfigFile.new()
 
@@ -36,7 +35,8 @@ var PopupButton: Button = Button.new()
 
 
 func _disable_plugin() -> void:
-	print("disanled")
+	#print("disanled")
+	pass
 
 
 func _enter_tree() -> void:
@@ -51,49 +51,24 @@ func _enter_tree() -> void:
 		#print("Creating plugin settings")
 		#_create_persistant_editor_settings()
 
-	#main_panel_instance = MainPanel.instantiate]]()
-	# Add the main panel to the editor's main viewport.
-	#EditorInterface.get_editor_main_screen().add_child(main_panel_instance)
-	# Hide the main panel. Very much required.
-	#_make_visible(false)
-
 
 func _exit_tree() -> void:
 	#print("exietd")
 	_remove_plugin_nodes()
 
-	#print(ConfigurationPopup)
 	if ConfigurationPopup:  ConfigurationPopup.queue_free()
 	#print(ConfigurationPopup)
-
-	#if main_panel_instance:
-		#main_panel_instance.queue_free()
-
-
-#func _has_main_screen():
-	#return true
-#
-#func _make_visible(visible):
-	#if main_panel_instance:
-		#main_panel_instance.visible = visible
-#
-#func _get_plugin_name():
-	#return "Settings"
-#
-#func _get_plugin_icon():
-	#return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
 
 
 # Initializes editor variables
 func _initialize_editor_variables():
 	default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
-	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir )
+	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir + default_plugin_config_folder )
 
 
 func _initialize_plugin_variables():
 	plugin_config_dir = default_plugin_config_dir
 	plugin_config_folder = default_plugin_config_folder
-	plugin_config_path = plugin_config_dir + plugin_config_folder
 
 	_add_plugin_nodes()
 	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 3)
@@ -107,30 +82,23 @@ func _initialize_plugin_variables():
 
 
 func _initialize_plugin_data():
-	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
-	var dir = DirAccess.open(config_folder)
+	# Check if plugin config folder exists
+	var dir = DirAccess.open(default_editor_config_dir)
 	if dir:
 		# TODO: Ask for save location ?
-		# Create dir "/plugin_data/persistant_settings" ?
 		if dir.dir_exists("persistant_settings_plugin"):
 			dir.open("persistant_settings_plugin")
 		else:
 			dir.make_dir("persistant_settings_plugin")
 			dir.open("persistant_settings_plugin")
 
-	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + default_plugin_config_folder)
 	#print(config_folder + "/plugin_settings.cfg")
 	#print(plugin_settings.encode_to_text())
 	#var a = FileAccess.open(config_folder + "/plugin_settings.cfg", FileAccess.READ)
 	#print(a.get_as_text())
-	#var b = ConfigFile.new()
-	#print(b.load(config_folder + "/plugin_settings.cfg"))
-	#print(b.encode_to_text())
-	#print(b.get_sections())
-	#print(")
-	#print(plugin_settings.get_value("General", "welcome_message", false))
 
-	if plugin_settings.load(config_folder + "/plugin_settings.cfg") != Error.OK:
+	if plugin_settings.load(plugin_config_dir + "/plugin_settings.cfg") != Error.OK:
 		_create_plugin_settings()
 
 	if plugin_settings.get_value("General", "show_on_launch", false) == true:
@@ -139,8 +107,13 @@ func _initialize_plugin_data():
 
 
 func _create_plugin_settings():
-	var config_folder = EditorInterface.get_editor_paths().get_config_dir()
-	config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+	#var config_folder = EditorInterface.get_editor_paths().get_config_dir()
+	#config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
+
+	var dir = DirAccess.open(plugin_config_dir)
+	if dir:
+		if dir.dir_exists("presets"):
+			dir.make_dir("presets")
 
 	var default_import_options = {
 		project_settings = true,
@@ -164,7 +137,7 @@ func _create_plugin_settings():
 	}
 	plugin_settings.set_value("General", "import_options", default_import_options)
 	plugin_settings.set_value("General", "save_options", default_save_options)
-	plugin_settings.save(config_folder + "/plugin_settings.cfg")
+	plugin_settings.save(plugin_config_dir + "/plugin_settings.cfg")
 	#print(plugin_settings.encode_to_text())
 
 
@@ -194,6 +167,7 @@ func _add_configuration_popup():
 		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
 		ConfigurationPopup.file_save_requested.connect( _file_save_requested )
 		#ConfigurationPopup.file_overwrite_requested.connect( _on_file_overwrite_requested )
+
 		ConfigurationPopup.plugin_settings_saved.connect( _on_plugin_settings_saved )
 	else:
 		ConfigurationPopup.grab_focus()
@@ -221,36 +195,44 @@ func _file_import_requested(files):
 			continue
 
 		var global_file := ConfigFile.new()
-		var load_result = global_file.load(plugin_config_path + "/" + file_name)
+		var load_result = global_file.load(plugin_config_dir + "/" + file_name)
 		if !load_result == Error.OK:  push_error("could not load from global: " + str(load_result))
 
 		# Detect plain unformatted files (non cfg files)
 		if global_file.encode_to_text() == "":
-			var a = FileAccess.open(plugin_config_path + "/" + file_name, FileAccess.READ)
+			var a = FileAccess.open(plugin_config_dir + "/" + file_name, FileAccess.READ)
 			var b = FileAccess.open(default_project_config_dir + "/" + file_name, FileAccess.WRITE_READ)
 			# Save contents as plain text
 			b.store_string( a.get_as_text() )
 			b.close()
-			print("%s imported" % [file_name])
+			#print("[Persistant Settings]: File %s imported" % [file_name])
 
 		else:
 			var local_file := global_file
 			var save_result = local_file.save(default_project_config_dir + "/" + file_name)
 			if !save_result == Error.OK:  push_error("could not save to local: " + str(save_result))
-			else:  print("%s imported" % [file_name])
+			#else:  print("%s imported" % [file_name])
 
 
 # Saves the specified file to the plugin's global data folder
-func _file_save_requested(files, save_path: String = ""):
+func _file_save_requested(files, save_path: String = "", save_as_preset: bool = false):
 	if !files is Array: files = [files]
+
+	var plugin_config_dir = plugin_config_dir
+	if save_as_preset == true:
+		var dir = DirAccess.open(plugin_config_dir + "/presets/")
+		if !dir.dir_exists(save_path):  dir.make_dir(save_path)
+		plugin_config_dir = plugin_config_dir + "/presets/" + save_path
+
+		var presets: Array = plugin_settings.get_value("General", "presets", [])
+		presets.append(save_path)
+		plugin_settings.set_value("General", "presets", presets )
+		_on_plugin_settings_saved()
 
 	for file_name in files:
 		if file_name == "project.godot":
-			_save_project_settings()
+			_save_project_settings("/presets/" + save_path + "/")
 			continue
-		#if file_name == "plugin_settings.cfg":
-			#_save_plugin_settings()
-			#continue
 
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load(default_project_config_dir + "/" + file_name)
@@ -261,17 +243,16 @@ func _file_save_requested(files, save_path: String = ""):
 		if local_file.encode_to_text() == "":
 			# Open as plain file
 			var a = FileAccess.open(default_project_config_dir + "/" + file_name, FileAccess.READ)
-			var b = FileAccess.open(plugin_config_path + "/" + file_name, FileAccess.WRITE_READ)
+			var b = FileAccess.open(plugin_config_dir + "/" + file_name, FileAccess.WRITE_READ)
 			# Save contents as plain text
 			b.store_string( a.get_as_text() )
 			b.close()
-			print("%s saved" % [file_name])
-
+			#print("%s saved" % [file_name])
 		else:
 			var global_file := local_file
-			var save_result = global_file.save(plugin_config_path + "/" + file_name)
+			var save_result = global_file.save(plugin_config_dir + "/" + file_name)
 			if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
-			else:  print("%s saved" % [file_name])
+			#else:  print("%s saved" % [file_name])
 
 
 # Saves the specified file to the plugin's global data folder by overwriting any existing files.
@@ -279,9 +260,9 @@ func _file_overwrite_requested():
 	pass
 
 
-func _import_project_settings():
+func _import_project_settings(preset_path: String = ""):
 	var local_file := ConfigFile.new()
-	var load_result = local_file.load(plugin_config_path + "/" + "project.godot")
+	var load_result = local_file.load(plugin_config_dir + "/" + "project.godot")
 	if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
 
 	var global_file := local_file
@@ -290,7 +271,7 @@ func _import_project_settings():
 	else:  print("%s imported" % ["project.godot"])
 
 
-func _save_project_settings():
+func _save_project_settings(preset_path: String = ""):
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load("res://" + "project.godot")
 		if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
@@ -300,27 +281,13 @@ func _save_project_settings():
 			if global_file.has_section("application"):  global_file.erase_section("application")
 			if global_file.has_section("editor_plugins"):  global_file.erase_section("editor_plugins")
 
-		var save_result = global_file.save(plugin_config_path + "/" + "project.godot")
+		var save_result = global_file.save(plugin_config_dir + "/" + preset_path + "project.godot")
 		if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
-		else:  print("%s saved" % ["project.godot"])
+		#else:  print("%s saved" % ["project.godot"])
 
 
-func _on_plugin_settings_saved(ImportOptions: Control = null, SaveOptions: Control = null):
-	#if ImportOptions and SaveOptions:
-		#var import_options = plugin_settings.get_value("General", "import_options", {})
-		#for option in import_options.keys():
-			#if ImportOptions.has_node(NodePath(option)):
-				#import_options[option] = ImportOptions.get_node(option + "/CheckBox").button_pressed#plugin_settings.set_value("General", "import_options", ImportOptions.get_node(import_option + "/CheckBox").button_pressed)
-		#plugin_settings.set_value("General", "import_options", import_options)
-#
-		#var save_options = plugin_settings.get_value("General", "save_options", {})
-		#for option in save_options.keys():
-			#if SaveOptions.has_node(NodePath(option)):
-				#save_options[option] = SaveOptions.get_node(option + "/CheckBox").button_pressed#plugin_settings.set_value("General", "import_options", ImportOptions.get_node(import_option + "/CheckBox").button_pressed)
-		#plugin_settings.set_value("General", "save_options", save_options)
-
-	plugin_settings.save(plugin_config_path + "/plugin_settings.cfg")
-	#print(plugin_settings.get_value("General", "import_options", {}))
+func _on_plugin_settings_saved():
+	plugin_settings.save(plugin_config_dir + "/plugin_settings.cfg")
 
 
 #func plugin_config_folder_exists():

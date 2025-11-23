@@ -6,6 +6,8 @@ signal file_save_requested
 #signal file_overwrite_requested
 signal file_import_requested
 signal file_view_requested
+signal preset_save_requsted
+signal preset_import_requsted
 signal plugin_settings_saved
 
 var viewed_file
@@ -125,6 +127,26 @@ func _initialize_welcome_screen():
 		#plugin_settings_saved.emit() )
 
 
+	#var preset_dir = DirAccess.open(plugin_config_path + "/presets")
+	#if preset_dir:
+		#for preset in preset_dir.get_directories():
+			#pass
+
+	WelcomeScreen.get_node("%PresetOptions/%DeletePresetButton").pressed.connect( func(): #.bind())
+		pass )
+	# Save files into specified preset folder.
+	WelcomeScreen.get_node("%PresetOptions/%SavePresetButton").pressed.connect( func(): #.bind())
+			var preset_name: String = WelcomeScreen.get_node("%PresetOptions/%SavePresetInput").text
+			preset_name.replace("/", "")  # Remove slashes
+			preset_name.replace("\\", "")  # Remove backslashes
+			if preset_name:
+				var arr = []
+				for save_option in plugin_settings.get_value("General", "save_options", {}).keys():
+					if plugin_settings.get_value("General", "save_options", {})[save_option] == true:
+						arr.append( FileConstants.get(save_option) )
+				file_save_requested.emit(arr, preset_name, true) )
+
+
 func _initialize_general_screen():
 	var file_name: String
 	var node_path: String
@@ -135,17 +157,18 @@ func _initialize_general_screen():
 	var FavoriteNodesGroup = %BasicScreen/%FavoriteNodesSection
 	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
 
+	GeneralSettingsGroup.get_node("ViewFolderButton").pressed.connect( func():
+		OS.shell_open( ProjectSettings.globalize_path(EditorInterface.get_editor_paths().get_config_dir() + "/persistant_settings_plugin") ))
 	GeneralSettingsGroup.get_node("auto_import").pressed.connect( func():
 		plugin_settings.set_value("General", "auto_import", GeneralSettingsGroup.get_node("auto_import").button_pressed))
 	GeneralSettingsGroup.get_node("show_on_launch").pressed.connect( func():
 		plugin_settings.set_value("General", "show_on_launch", GeneralSettingsGroup.get_node("show_on_launch").button_pressed))
+
 	#file_name = "project.godot"
-	#plugin_settings.set_value("ProjectSettings", "include_metadata", ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").button_pressed )
 	#ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").pressed.connect( plugin_settings.set_value
 		#.bind("ProjectSettings", "include_metadata", ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").button_pressed))
 	ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").pressed.connect( func():
 		plugin_settings.set_value("ProjectSettings", "include_metadata", ProjectSettingsGroup.get_node("IncludeMetadataCheckBox").button_pressed))
-	#ProjectSettingsGroup.get_node("HBoxContainer/SaveButton").pressed.connect( file_save_requested.emit.bind( file_name ))
 
 	#file_name = "favorite_properties"
 	#FavoritePropertiesGroup.get_node("HBoxContainer/ViewButton").pressed.connect( file_view_requested.emit.bind( file_name ))
@@ -177,6 +200,11 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 		if SaveOptions.has_node(save_options + "/CheckBox"):
 			SaveOptions.get_node(save_options + "/CheckBox").button_pressed = plugin_settings.get_value("General", "save_options", {})[save_options]
 
+	# Add preset options to preset selector
+	var dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
+	for i in dropdown.item_count - 1: dropdown.remove_item(-1)  # Reset dropdown optoins
+	for i in plugin_settings.get_value("General", "presets", []):  # Add new dropdown optoins
+		dropdown.add_item(i)
 
 	var GeneralSettingsGroup = %BasicScreen/%GeneralSettingsGroup
 	GeneralSettingsGroup.get_node("auto_import").button_pressed = plugin_settings.get_value("General", "auto_import", false)

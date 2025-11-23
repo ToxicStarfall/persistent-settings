@@ -48,6 +48,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
@@ -83,27 +84,27 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 12
 
-[node name="WelcomeLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
+[node name="Note" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
 layout_mode = 2
 size_flags_vertical = 0
 bbcode_enabled = true
 text = "[i]Note: Importing and Saving will overwrite any previous files[/i]"
 fit_content = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="ImportOptions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2"]
+[node name="ImportOptions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 layout_mode = 2
 theme_override_constants/separation = 24
 theme_override_styles/separator = SubResource("StyleBoxLine_35ag3")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/HSeparator"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/HSeparator"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -119,7 +120,7 @@ grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_35ag3")
 text = "Import Options"
 
-[node name="ImportStatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="ImportStatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 14
@@ -128,100 +129,91 @@ text = "[i]import status[/i]"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="ImportAllButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/HBoxContainer"]
+[node name="ImportAllButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Import All"
 
-[node name="ImportSelectedButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/HBoxContainer"]
+[node name="ImportSelectedButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Import Selected"
 
-[node name="ImportPresetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/HBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Import Preset (WIP)"
-
-[node name="ImportPropertiesButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/HBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Import Favorited Properties"
-
-[node name="project_settings" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="project_settings" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/project_settings"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/project_settings"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Project Settings"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/project_settings"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/project_settings"]
 layout_mode = 2
 tooltip_text = "Import"
 icon = ExtResource("1_35ag3")
 icon_alignment = 1
 
-[node name="favorite_properties" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="favorite_properties" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_properties"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_properties"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Properties"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_properties"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_properties"]
 layout_mode = 2
 tooltip_text = "Import"
 icon = ExtResource("1_35ag3")
 
-[node name="favorite_nodes" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="favorite_nodes" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_nodes"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_nodes"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Nodes"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_nodes"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_nodes"]
 layout_mode = 2
 tooltip_text = "Import"
 icon = ExtResource("1_35ag3")
 
-[node name="favorite_files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions"]
+[node name="favorite_files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_files"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_files"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Files"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/ImportOptions/favorite_files"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions/favorite_files"]
 layout_mode = 2
 tooltip_text = "Import"
 icon = ExtResource("1_35ag3")
 
-[node name="SaveOptions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/ImportOptions"]
+layout_mode = 2
+
+[node name="SaveOptions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 layout_mode = 2
 theme_override_constants/separation = 24
 theme_override_styles/separator = SubResource("StyleBoxLine_35ag3")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/HSeparator"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/HSeparator"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -238,7 +230,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_35ag3")
 text = "Save Options"
 horizontal_alignment = 1
 
-[node name="SaveStatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="SaveStatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 14
@@ -247,79 +239,143 @@ text = "[i]save status[/i]"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="SaveAllButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/HBoxContainer"]
+[node name="SaveAllButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save All"
 
-[node name="SaveSelectedButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/HBoxContainer"]
+[node name="SaveSelectedButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save Selected"
 
-[node name="project_settings" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="project_settings" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/project_settings"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/project_settings"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Project Settings"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/project_settings"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/project_settings"]
 layout_mode = 2
 tooltip_text = "Save"
 icon = ExtResource("1_35ag3")
 
-[node name="favorite_properties" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="favorite_properties" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_properties"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_properties"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Properties"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_properties"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_properties"]
 layout_mode = 2
 tooltip_text = "Save"
 icon = ExtResource("1_35ag3")
 
-[node name="favorite_nodes" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="favorite_nodes" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_nodes"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_nodes"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Nodes"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_nodes"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_nodes"]
 layout_mode = 2
 tooltip_text = "Save"
 icon = ExtResource("1_35ag3")
 
-[node name="favorite_files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions"]
+[node name="favorite_files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_files"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_files"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Favorite Files"
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer2/SaveOptions/favorite_files"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HBoxContainer/SaveOptions/favorite_files"]
 layout_mode = 2
 tooltip_text = "Save"
 icon = ExtResource("1_35ag3")
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
 layout_mode = 2
+theme_override_constants/separation = 24
+theme_override_styles/separator = SubResource("StyleBoxLine_35ag3")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/HSeparator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -11.1667
+offset_right = 61.5
+offset_bottom = 11.1667
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_35ag3")
+text = "Preset Options"
+horizontal_alignment = 1
+
+[node name="PresetOptions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions"]
+layout_mode = 2
+
+[node name="PresetDropdown" type="OptionButton" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "None (select a preset)"
+popup/item_0/id = 0
+
+[node name="DeletePresetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete Preset"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions"]
+layout_mode = 2
+
+[node name="ImportPresetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import Preset"
+
+[node name="SavePresetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save Preset"
+
+[node name="SavePresetInput" type="TextEdit" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Preset Name"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
+layout_mode = 2
+theme_override_constants/separation = 12
 theme_override_styles/separator = SubResource("StyleBoxLine_35ag3")
 
 [node name="ApplyButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup"]
