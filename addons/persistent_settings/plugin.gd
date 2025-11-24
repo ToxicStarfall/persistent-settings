@@ -79,6 +79,7 @@ func _initialize_plugin_variables():
 
 	EditorMenuBar = EditorToolbar.get_child(0)
 	ProjectMenu = EditorMenuBar.get_child(1)
+	print(ProjectMenu.get_script().get_global_name())
 
 
 func _initialize_plugin_data():
@@ -144,6 +145,7 @@ func _create_plugin_settings():
 func _add_plugin_nodes():
 	PopupButton.text = "Persistant Settings"
 	PopupButton.pressed.connect( _add_configuration_popup )
+	#add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
 	add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
 
 
@@ -158,15 +160,16 @@ func _add_configuration_popup():
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
 		ConfigurationPopup.plugin_settings = plugin_settings
-		EditorInterface.get_base_control().add_child(ConfigurationPopup)
-		#print(ConfigurationPopup)
-		ConfigurationPopup.apply_plugin_settings(plugin_settings)
+		ConfigurationPopup.Plugin = self
 
+		EditorInterface.get_base_control().add_child(ConfigurationPopup)
+		ConfigurationPopup.apply_plugin_settings(plugin_settings)
 		# Connect signals
 		ConfigurationPopup.file_view_requested.connect( _file_view_requested )
 		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
 		ConfigurationPopup.file_save_requested.connect( _file_save_requested )
 		#ConfigurationPopup.file_overwrite_requested.connect( _on_file_overwrite_requested )
+		ConfigurationPopup.preset_delete_requested.connect( _preset_delete_requested )
 
 		ConfigurationPopup.plugin_settings_saved.connect( _on_plugin_settings_saved )
 	else:
@@ -186,8 +189,11 @@ func _file_view_requested():
 
 
 # Imports the specified file to the project's data folder
-func _file_import_requested(files):
+func _file_import_requested(files, preset: bool = false, path: String = "", ):
 	if !files is Array: files = [files]
+
+	var plugin_config_dir = plugin_config_dir
+	if preset == true: plugin_config_dir = plugin_config_dir + "/presets/" + path
 
 	for file_name in files:
 		if file_name == "project.godot":
@@ -225,7 +231,7 @@ func _file_save_requested(files, save_path: String = "", save_as_preset: bool = 
 		plugin_config_dir = plugin_config_dir + "/presets/" + save_path
 
 		var presets: Array = plugin_settings.get_value("General", "presets", [])
-		presets.append(save_path)
+		if !presets.has(save_path): presets.append(save_path)
 		plugin_settings.set_value("General", "presets", presets )
 		_on_plugin_settings_saved()
 
@@ -268,7 +274,7 @@ func _import_project_settings(preset_path: String = ""):
 	var global_file := local_file
 	var save_result = global_file.save("res://" + "project.godot")
 	if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
-	else:  print("%s imported" % ["project.godot"])
+	#else:  print("%s imported" % ["project.godot"])
 
 
 func _save_project_settings(preset_path: String = ""):
@@ -286,8 +292,18 @@ func _save_project_settings(preset_path: String = ""):
 		#else:  print("%s saved" % ["project.godot"])
 
 
+func _preset_delete_requested(preset_name):
+	#print(plugin_config_dir + "/presets")
+	#var preset_dir = DirAccess.open(plugin_config_dir + "/presets/")
+	assert(OS.move_to_trash(plugin_config_dir + "/presets/" + preset_name) == Error.OK)
+	var preset: Array = plugin_settings.get_value("General", "presets", [])
+	if preset.has(preset_name):
+		preset.erase(preset_name)
+
+
 func _on_plugin_settings_saved():
 	plugin_settings.save(plugin_config_dir + "/plugin_settings.cfg")
+	ConfigurationPopup.apply_plugin_settings(plugin_settings)
 
 
 #func plugin_config_folder_exists():

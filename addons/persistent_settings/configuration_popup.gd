@@ -6,10 +6,10 @@ signal file_save_requested
 #signal file_overwrite_requested
 signal file_import_requested
 signal file_view_requested
-signal preset_save_requsted
-signal preset_import_requsted
+signal preset_delete_requested( preset_name: String )
 signal plugin_settings_saved
 
+var Plugin
 var viewed_file
 var plugin_settings: ConfigFile
 
@@ -51,7 +51,6 @@ func _exit_tree() -> void:
 func _connect_buttons():
 	_initialize_welcome_screen()
 	_initialize_general_screen()
-
 
 # Disconnects signals to prevent errors within editor while editing scenes.
 func _disconnect_buttons():
@@ -132,8 +131,24 @@ func _initialize_welcome_screen():
 		#for preset in preset_dir.get_directories():
 			#pass
 
-	WelcomeScreen.get_node("%PresetOptions/%DeletePresetButton").pressed.connect( func(): #.bind())
-		pass )
+	WelcomeScreen.get_node("%PresetOptions/%DeletePresetButton").pressed.connect( func():
+			var preset_dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
+			var preset_idx: int = preset_dropdown.selected
+			if !preset_idx == 0:
+				preset_delete_requested.emit( preset_dropdown.get_item_text(preset_idx) )
+				preset_dropdown.remove_item(preset_idx)
+				preset_dropdown.selected = 0
+				plugin_settings_saved.emit()
+				apply_plugin_settings(plugin_settings)
+				)
+	WelcomeScreen.get_node("%PresetOptions/%ImportPresetButton").pressed.connect( func():
+			var preset_dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
+			if !preset_dropdown.selected == 0:
+				var preset = DirAccess.open( Plugin.plugin_config_dir )
+				preset.change_dir("presets")
+				preset.change_dir(preset_dropdown.get_item_text( preset_dropdown.selected ))
+				file_import_requested.emit( Array(preset.get_files()) )
+			pass )
 	# Save files into specified preset folder.
 	WelcomeScreen.get_node("%PresetOptions/%SavePresetButton").pressed.connect( func(): #.bind())
 			var preset_name: String = WelcomeScreen.get_node("%PresetOptions/%SavePresetInput").text
@@ -202,7 +217,8 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 
 	# Add preset options to preset selector
 	var dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
-	for i in dropdown.item_count - 1: dropdown.remove_item(-1)  # Reset dropdown optoins
+	#if dropdown.get_item_index()
+	#for i in dropdown.item_count - 1: dropdown.remove_item(-1)  # Reset dropdown optoins
 	for i in plugin_settings.get_value("General", "presets", []):  # Add new dropdown optoins
 		dropdown.add_item(i)
 
@@ -222,7 +238,6 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 
 	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
 	#FavoriteFilesGroup.get_node("HBoxContainer/SaveButton")
-
 
 
 func _on_tab_changed(tab):
