@@ -137,10 +137,10 @@ func _initialize_welcome_screen():
 			if !preset_idx == 0:
 				preset_delete_requested.emit( preset_dropdown.get_item_text(preset_idx) )
 				preset_dropdown.remove_item(preset_idx)
-				preset_dropdown.selected = 0
 				plugin_settings_saved.emit()
 				apply_plugin_settings(plugin_settings)
-				)
+				preset_dropdown.selected = 0
+			pass )
 	WelcomeScreen.get_node("%PresetOptions/%ImportPresetButton").pressed.connect( func():
 			var preset_dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
 			if !preset_dropdown.selected == 0:
@@ -159,7 +159,8 @@ func _initialize_welcome_screen():
 				for save_option in plugin_settings.get_value("General", "save_options", {}).keys():
 					if plugin_settings.get_value("General", "save_options", {})[save_option] == true:
 						arr.append( FileConstants.get(save_option) )
-				file_save_requested.emit(arr, preset_name, true) )
+				file_save_requested.emit(arr, preset_name, true)
+			pass )
 
 
 func _initialize_general_screen():
@@ -218,7 +219,7 @@ func apply_plugin_settings(plugin_settings: ConfigFile):
 	# Add preset options to preset selector
 	var dropdown: OptionButton = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown")
 	#if dropdown.get_item_index()
-	#for i in dropdown.item_count - 1: dropdown.remove_item(-1)  # Reset dropdown optoins
+	for i in dropdown.item_count - 1: dropdown.remove_item(dropdown.item_count - 1)  # Reset dropdown optoins
 	for i in plugin_settings.get_value("General", "presets", []):  # Add new dropdown optoins
 		dropdown.add_item(i)
 

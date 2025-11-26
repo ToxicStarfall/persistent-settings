@@ -71,15 +71,19 @@ func _initialize_plugin_variables():
 	plugin_config_folder = default_plugin_config_folder
 
 	_add_plugin_nodes()
-	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 3)
+	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 5)
 
 	EditorToolbar = PopupButton.get_parent()
-	#EditorToolbar = EditorPlugin.CONTAINER_TOOLBAR
-	#EditorToolbar.remove_child(control)
+	#EditorToolbar.remove_child(PopupButton)
 
 	EditorMenuBar = EditorToolbar.get_child(0)
+	#EditorToolbar.add_child(PopupButton)
+	#print(EditorMenuBar)
 	ProjectMenu = EditorMenuBar.get_child(1)
-	print(ProjectMenu.get_script().get_global_name())
+
+	#ProjectMenu.add_item("asndkj")
+	#print(ProjectMenu)
+	#print(ProjectMenu.get_script().get_global_name())
 
 
 func _initialize_plugin_data():
