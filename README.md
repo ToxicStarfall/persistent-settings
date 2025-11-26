@@ -1,9 +1,9 @@
 <h1>
-	Persistant Settings
+	Persistent Settings
 </h1>
 <img width="320" height="224" alt="persistant_settings" src="https://github.com/user-attachments/assets/4e06c7b0-82f5-4201-a444-2c4898707740" />
 <p>
-	Persistant Settings is a addon for Godot which lets you quickly save and import your favorited nodes, node properties, files, or project settings between different projects. <br>
+	Persistent Settings is a addon for Godot which lets you quickly save and import your favorited nodes, node properties, files, or project settings between different projects. <br>
   
   Save your favorite settings and create presets to help speed up the setup phase of new projects.
 </p>
