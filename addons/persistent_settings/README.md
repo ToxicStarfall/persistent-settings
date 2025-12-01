@@ -11,7 +11,7 @@
 <br>
 <p>
 	<a href="https://github.com/ToxicStarfall/persistant-settings/releases">Releases</a> -
-	<a href="https://godotengine.org/asset-library/">Asset Library</a>
+	<a href="https://godotengine.org/asset-library/asset/4512">Asset Library</a>
 </p>
 
 <br>
