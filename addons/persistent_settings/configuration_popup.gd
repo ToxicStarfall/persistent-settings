@@ -152,6 +152,11 @@ func _initialize_welcome_screen():
 	# Save files into specified preset folder.
 	WelcomeScreen.get_node("%PresetOptions/%SavePresetButton").pressed.connect( func(): #.bind())
 			var preset_name: String = WelcomeScreen.get_node("%PresetOptions/%SavePresetInput").text
+			if !preset_name:  # Use the selecetd preset in dropdown if no new preset is specified.
+				if WelcomeScreen.get_node("%PresetOptions/%PresetDropdown").selected != 0:
+					preset_name = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown").text
+
+			#var preset_name: String = WelcomeScreen.get_node("%PresetOptions/%SavePresetInput").text
 			preset_name.replace("/", "")  # Remove slashes
 			preset_name.replace("\\", "")  # Remove backslashes
 			if preset_name:

@@ -182,18 +182,10 @@ theme_override_constants/margin_bottom = 8
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection"]
-visible = false
+[node name="NoSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection"]
 layout_mode = 2
-
-[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection/HBoxContainer"]
-visible = false
-layout_mode = 2
-text = "View"
-
-[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoritePropertiesMargin/FavoritePropertiesSection/HBoxContainer"]
-layout_mode = 2
-text = "Save (overwrite)"
+text = "No settings available."
+fit_content = true
 
 [node name="FavoriteNodesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
 layout_mode = 2
@@ -213,18 +205,10 @@ theme_override_constants/margin_bottom = 8
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection"]
-visible = false
+[node name="NoSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection"]
 layout_mode = 2
-
-[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection/HBoxContainer"]
-visible = false
-layout_mode = 2
-text = "View"
-
-[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteNodesMargin/FavoriteNodesSection/HBoxContainer"]
-layout_mode = 2
-text = "Save (overwrite)"
+text = "No settings available."
+fit_content = true
 
 [node name="FavoriteFilesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
 layout_mode = 2
@@ -244,18 +228,10 @@ theme_override_constants/margin_bottom = 8
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection"]
-visible = false
+[node name="NoSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection"]
 layout_mode = 2
-
-[node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection/HBoxContainer"]
-visible = false
-layout_mode = 2
-text = "View"
-
-[node name="SaveButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/FavoriteFilesMargin/FavoriteFilesSection/HBoxContainer"]
-layout_mode = 2
-text = "Save (overwrite)"
+text = "No settings available."
+fit_content = true
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
 layout_mode = 2
