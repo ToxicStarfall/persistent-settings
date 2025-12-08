@@ -96,6 +96,9 @@ func _initialize_plugin_data():
 		else:
 			dir.make_dir("persistant_settings_plugin")
 			dir.open("persistant_settings_plugin")
+	dir = DirAccess.open(plugin_config_dir)
+	if dir.dir_exists("presets"): pass
+	else: dir.make_dir("presets")
 
 	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + default_plugin_config_folder)
 	#print(config_folder + "/plugin_settings.cfg")
