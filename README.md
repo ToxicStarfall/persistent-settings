@@ -37,14 +37,15 @@ _Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Go
 <h4>Quick Start Tab</h4>
 
 - Import and Save options
-	- Import options will retrive the saved settings from the plugin's configuration folder (see "General Settings").
-	- Save options will retrive the saved settings from the project's configuration folder (project/.godot/editor).
+	- Import options will retrieve the saved settings from the plugin's configuration folder (see "General Settings").
+	- Save options will retrieve the saved settings from the project's configuration folder (project/.godot/editor).
+ 	- Using the "All" or "Selected" buttons will import or save the specified settings/files. 
 	- Press the download icon to the right of import/save toggles to import or save only that setting.
 	- Toggle the different options to include or exclude that setting from being saved.
 
 - Preset Options
 	- Select a preset from the dropdown to delete, import, or save the preset.
-	- Specify a new preset name to create a new one, or save an existing one (ignores preset dropdown).
+	- Specify a new preset name to create a new one, or save an existing one (ignores preset dropdown). A new folder will be created in the "presets" folder in this plugin's configuration folder.
 	- Select the import or save buttons to save or import from the selected preset.
 - Press the "Apply" button to save changes to save/import options.
 
