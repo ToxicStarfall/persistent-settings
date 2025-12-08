@@ -179,7 +179,7 @@ func _initialize_general_screen():
 	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
 
 	GeneralSettingsGroup.get_node("ViewFolderButton").pressed.connect( func():
-		OS.shell_open( ProjectSettings.globalize_path(EditorInterface.get_editor_paths().get_config_dir() + "/persistant_settings_plugin") ))
+		OS.shell_open( ProjectSettings.globalize_path(EditorInterface.get_editor_paths().get_config_dir() + "/persistent_settings_plugin") ))
 	GeneralSettingsGroup.get_node("auto_import").pressed.connect( func():
 		plugin_settings.set_value("General", "auto_import", GeneralSettingsGroup.get_node("auto_import").button_pressed))
 	GeneralSettingsGroup.get_node("show_on_launch").pressed.connect( func():

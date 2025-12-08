@@ -13,7 +13,7 @@ var EditorMenuBar: MenuBar
 var ProjectMenu: PopupMenu
 
 # Plugin variables
-const default_plugin_config_folder: String = "/persistant_settings_plugin"
+const default_plugin_config_folder: String = "/persistent_settings_plugin"
 var plugin_config_dir: String
 var plugin_config_folder: String
 
@@ -45,7 +45,7 @@ func _enter_tree() -> void:
 	_initialize_plugin_data()
 
 	#var settings = EditorInterface.get_editor_settings()
-	#if settings.has_setting("persistant_settings/editor/property"):
+	#if settings.has_setting("persistent_settings/editor/property"):
 		#print("Existing plugin settings")
 	#else:
 		#print("Creating plugin settings")
@@ -91,11 +91,10 @@ func _initialize_plugin_data():
 	var dir = DirAccess.open(default_editor_config_dir)
 	if dir:
 		# TODO: Ask for save location ?
-		if dir.dir_exists("persistant_settings_plugin"):
-			dir.open("persistant_settings_plugin")
+		if dir.dir_exists("persistent_settings_plugin"):
+			dir.open("persistent_settings_plugin")
 		else:
-			dir.make_dir("persistant_settings_plugin")
-			dir.open("persistant_settings_plugin")
+			dir.make_dir("persistent_settings_plugin")
 	dir = DirAccess.open(plugin_config_dir)
 	if dir.dir_exists("presets"): pass
 	else: dir.make_dir("presets")
@@ -317,19 +316,19 @@ func _on_plugin_settings_saved():
 	#var config_folder = EditorInterface.get_editor_paths().get_config_dir()
 	#var dir = DirAccess.open(config_folder)
 	#if dir:
-		#if dir.dir_exists("persistant_settings_plugin"):
-			#dir.open("persistant_settings_plugin")
+		#if dir.dir_exists("persistent_settings_plugin"):
+			#dir.open("persistent_settings_plugin")
 		#else:
-			#dir.make_dir("persistant_settings_plugin")
-			#dir.open("persistant_settings_plugin")
+			#dir.make_dir("persistent_settings_plugin")
+			#dir.open("persistent_settings_plugin")
 
 
 #func _create_persistant_editor_settings():
 	#var settings = EditorInterface.get_editor_settings()
 	## `settings.set("some/property", 10)` also works as this class overrides `_set()` internally.
-	#settings.set_setting("persistant_settings/editor/property", 10)
-	#settings.set_setting("persistant_settings/plugins/property", 10)
+	#settings.set_setting("persistent_settings/editor/property", 10)
+	#settings.set_setting("persistent_settings/plugins/property", 10)
 	## `settings.get("some/property")` also works as this class overrides `_get()` internally.
-	#settings.get_setting("persistant_settings/editor/property")
+	#settings.get_setting("persistent_settings/editor/property")
 	#var list_of_settings = settings.get_property_list()
 	#pass
