@@ -157,8 +157,8 @@ func _initialize_welcome_screen():
 					preset_name = WelcomeScreen.get_node("%PresetOptions/%PresetDropdown").text
 
 			#var preset_name: String = WelcomeScreen.get_node("%PresetOptions/%SavePresetInput").text
-			preset_name.replace("/", "")  # Remove slashes
-			preset_name.replace("\\", "")  # Remove backslashes
+			preset_name.replace("/", " ")  # Remove slashes
+			preset_name.replace("\\", " ")  # Remove backslashes
 			if preset_name:
 				var arr = []
 				for save_option in plugin_settings.get_value("General", "save_options", {}).keys():

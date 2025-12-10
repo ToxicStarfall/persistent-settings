@@ -3,9 +3,7 @@
 [ext_resource type="Script" uid="uid://c48yp8ptwpur" path="res://addons/persistent_settings/configuration_popup.gd" id="1_rih0t"]
 [ext_resource type="PackedScene" uid="uid://4m5hnwa6eiko" path="res://addons/persistent_settings/screens/welcome_screen.tscn" id="2_qds54"]
 [ext_resource type="PackedScene" uid="uid://dywms8oine7jk" path="res://addons/persistent_settings/screens/basic_screen.tscn" id="3_8jt1d"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rih0t"]
-bg_color = Color(0.211765, 0.239216, 0.290196, 1)
+[ext_resource type="PackedScene" uid="uid://bdcro78mv83ss" path="res://addons/persistent_settings/screens/file_viewer.tscn" id="4_qds54"]
 
 [node name="ConfigurationPopup" type="Window"]
 title = "Persistant Settings Plugin Configuration"
@@ -64,11 +62,13 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 layout_mode = 2
 current_tab = 0
-tab_count = 2
+tab_count = 3
 tab_0/title = "Quick Start"
 tab_0/tooltip = "View quick start options"
 tab_1/title = "Basic Settings"
 tab_1/tooltip = "View basic settings"
+tab_2/title = "File Viewer"
+tab_2/tooltip = "View your saved settings"
 
 [node name="BackgroundColor" type="ColorRect" parent="MarginContainer/VBoxContainer/TabBar"]
 show_behind_parent = true
@@ -81,23 +81,6 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.145098, 0.168627, 0.203922, 1)
 
-[node name="ScreenHeader" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rih0t")
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScreenHeader"]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScreenHeader/MarginContainer"]
-layout_mode = 2
-text = "header"
-
 [node name="Screens" type="Control" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -108,6 +91,11 @@ unique_name_in_owner = true
 layout_mode = 1
 
 [node name="BasicScreen" parent="MarginContainer/VBoxContainer/Screens" instance=ExtResource("3_8jt1d")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="FileViewerScreen" parent="MarginContainer/VBoxContainer/Screens" instance=ExtResource("4_qds54")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://c63vw425s834y"]
+
+[ext_resource type="StyleBox" uid="uid://deoixttr14w78" path="res://addons/persistent_settings/components/section_label_stylebox.tres" id="1_kcn4b"]
+
+[node name="SectionLabel" type="RichTextLabel"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 29.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("1_kcn4b")
+bbcode_enabled = true
+text = "[b]Section Name[/b]"
+fit_content = true

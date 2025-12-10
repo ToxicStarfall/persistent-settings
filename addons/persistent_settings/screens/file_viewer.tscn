@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdcro78mv83ss"]
+
+[ext_resource type="PackedScene" uid="uid://c63vw425s834y" path="res://addons/persistent_settings/components/section_label.tscn" id="1_tq225"]
+
+[node name="FileViewerScreen" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SectionLabel" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_tq225")]
+layout_mode = 2
+text = "[b]File Selector[/b]"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PresetsDropdown" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "No Preset"
+popup/item_0/id = 0
+
+[node name="FileDropdown" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 5
+popup/item_0/text = "No File"
+popup/item_0/id = 0
+popup/item_1/text = "Project Settings"
+popup/item_1/id = 1
+popup/item_2/text = "Favorite Nodes"
+popup/item_2/id = 2
+popup/item_3/text = "Favorite Node Properties"
+popup/item_3/id = 3
+popup/item_4/text = "Favorite Files"
+popup/item_4/id = 4
+
+[node name="ViewFileButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "View File"
+
+[node name="ShowFolderButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Show in folder"
+
+[node name="SectionLabel2" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_tq225")]
+layout_mode = 2
+text = "[b]File View Output[/b]"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GeneralSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="NoSettingsLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/GeneralSettings"]
+layout_mode = 2
+text = "No settings available."
+fit_content = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
