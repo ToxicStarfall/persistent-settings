@@ -243,7 +243,7 @@ func _file_save_requested(files, save_path: String = "", save_as_preset: bool = 
 
 	for file_name in files:
 		if file_name == "project.godot":
-			_save_project_settings("/presets/" + save_path + "/")
+			_save_project_settings(plugin_config_dir + "/" )#+ save_path)
 			continue
 
 		var local_file := ConfigFile.new()
@@ -273,28 +273,39 @@ func _file_overwrite_requested():
 
 
 func _import_project_settings(preset_path: String = ""):
-	var local_file := ConfigFile.new()
-	var load_result = local_file.load(plugin_config_dir + "/" + "project.godot")
-	if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
+	var global_file := ConfigFile.new()
+	var load_result = global_file.load(plugin_config_dir + "/" + "project.godot")
+	if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from global: " + str(load_result))
 
-	var global_file := local_file
-	var save_result = global_file.save("res://" + "project.godot")
-	if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
+	var local_file := global_file
+	if plugin_settings.get_value("ProjectSettings", "include_metadata", false) != true:
+			if local_file.has_section("application"):  local_file.erase_section("application")
+			if local_file.has_section("editor_plugins"):  local_file.erase_section("editor_plugins")
+
+			# Implant local project settings to fill in gaps
+			for section in ["application", "editor_plugins"]:
+				var a = ConfigFile.new()
+				a.load("res://" + "project.godot")
+				for key in a.get_section_keys(section):
+					local_file.set_value(section, key, a.get_value(section , key))
+
+	var save_result = local_file.save("res://" + "project.godot")
+	if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to local: " + str(save_result))
 	#else:  print("%s imported" % ["project.godot"])
 
 
 func _save_project_settings(preset_path: String = ""):
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load("res://" + "project.godot")
-		if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
+		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from local: " + str(load_result))
 
 		var global_file := local_file
 		if plugin_settings.get_value("ProjectSettings", "include_metadata", false) != true:
 			if global_file.has_section("application"):  global_file.erase_section("application")
 			if global_file.has_section("editor_plugins"):  global_file.erase_section("editor_plugins")
 
-		var save_result = global_file.save(plugin_config_dir + "/" + preset_path + "project.godot")
-		if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
+		var save_result = global_file.save(preset_path + "project.godot")
+		if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to global: " + str(save_result))
 		#else:  print("%s saved" % ["project.godot"])
 
 
