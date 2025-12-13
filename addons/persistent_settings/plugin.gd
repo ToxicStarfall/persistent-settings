@@ -2,29 +2,30 @@
 extends EditorPlugin
 
 
-# Editor variables
-const default_project_config_dir: String = "res://.godot/editor"
-var default_editor_config_dir: String  # Set in _initialize_editor_variables()
-var default_plugin_config_dir: String  # Set in _initialize_editor_variables()
-
-# Editor nodes
-var EditorToolbar
-var EditorMenuBar: MenuBar
-var ProjectMenu: PopupMenu
-
-# Plugin variables
-const default_plugin_config_folder: String = "/persistent_settings_plugin"
-var plugin_config_dir: String
-var plugin_config_folder: String
-
-var plugin_settings: ConfigFile = ConfigFile.new()
-
 const FileNames = {
 	"project_settings": "project.godot",
 	"favorite_properties": "favorite_properties",
 	"favorite_nodes": "favorites.Node",
 	"favorite_files": "favorites",
 }
+
+# Editor variables
+const default_project_config_dir: String = "res://.godot/editor"
+var default_editor_config_dir: String  # Set in _initialize_editor_variables()
+var default_plugin_config_dir: String  # Set in _initialize_editor_variables()
+
+# Plugin variables
+const default_plugin_config_folder: String = "/persistent_settings_plugin"
+const default_plugin_resource_folder: String = "res://addons/persistent_settings"
+var plugin_config_dir: String
+var plugin_config_folder: String
+
+var settings: ConfigFile = ConfigFile.new()
+
+# Editor nodes
+var EditorToolbar: Control
+var EditorMenuBar: MenuBar
+var ProjectMenu: PopupMenu
 
 # Plugin nodes
 # ConfigurationPopup acts weird when hiding it instead of freeing while closing the popup
@@ -34,9 +35,9 @@ var ConfigurationPopup: Window
 var PopupButton: Button = Button.new()
 
 
-func _disable_plugin() -> void:
+#func _disable_plugin() -> void:
 	#print("disanled")
-	pass
+	#pass
 
 
 func _enter_tree() -> void:
@@ -53,19 +54,18 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	#print("exietd")
 	_remove_plugin_nodes()
 
 	if ConfigurationPopup:  ConfigurationPopup.queue_free()
 	#print(ConfigurationPopup)
 
 
-# Initializes editor variables
+# Initialize variables with editor constants
 func _initialize_editor_variables():
 	default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
 	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir + default_plugin_config_folder )
 
-
+# Initialize variarbles used by the plugin
 func _initialize_plugin_variables():
 	plugin_config_dir = default_plugin_config_dir
 	plugin_config_folder = default_plugin_config_folder
@@ -78,7 +78,6 @@ func _initialize_plugin_variables():
 
 	EditorMenuBar = EditorToolbar.get_child(0)
 	#EditorToolbar.add_child(PopupButton)
-	#print(EditorMenuBar)
 	ProjectMenu = EditorMenuBar.get_child(1)
 
 	#ProjectMenu.add_item("asndkj")
@@ -95,57 +94,23 @@ func _initialize_plugin_data():
 			dir.open("persistent_settings_plugin")
 		else:
 			dir.make_dir("persistent_settings_plugin")
+	# Check if "presets" folder exists
 	dir = DirAccess.open(plugin_config_dir)
 	if dir.dir_exists("presets"): pass
 	else: dir.make_dir("presets")
 
 	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + default_plugin_config_folder)
 	#print(config_folder + "/plugin_settings.cfg")
-	#print(plugin_settings.encode_to_text())
+	#print(settings.encode_to_text())
 	#var a = FileAccess.open(config_folder + "/plugin_settings.cfg", FileAccess.READ)
 	#print(a.get_as_text())
 
-	if plugin_settings.load(plugin_config_dir + "/plugin_settings.cfg") != Error.OK:
-		_create_plugin_settings()
+	if settings.load(plugin_config_dir + "/plugin_settings.cfg") != Error.OK:
+		create_plugin_settings()
 
-	if plugin_settings.get_value("General", "show_on_launch", false) == true:
+	if settings.get_value("General", "show_on_launch", false) == true:
 		_add_configuration_popup()
 	#_apply_plugin_settings()
-
-
-func _create_plugin_settings():
-	#var config_folder = EditorInterface.get_editor_paths().get_config_dir()
-	#config_folder = ProjectSettings.globalize_path(config_folder + default_plugin_config_folder)
-
-	var dir = DirAccess.open(plugin_config_dir)
-	if dir:
-		if dir.dir_exists("presets"):
-			dir.make_dir("presets")
-
-	var default_import_options = {
-		project_settings = true,
-		favorite_properties = true,
-		favorite_nodes = true,
-		favorite_files = false,
-		favorite_objects = false,
-		recent_nodes = false,
-		recent_objects = false,
-		recent_directories = false,
-	}
-	var default_save_options = {
-		project_settings = true,
-		favorite_properties = true,
-		favorite_nodes = true,
-		favorite_files = false,
-		favorite_objects = false,
-		recent_nodes = false,
-		recent_objects = false,
-		recent_directories = false,
-	}
-	plugin_settings.set_value("General", "import_options", default_import_options)
-	plugin_settings.set_value("General", "save_options", default_save_options)
-	plugin_settings.save(plugin_config_dir + "/plugin_settings.cfg")
-	#print(plugin_settings.encode_to_text())
 
 
 func _add_plugin_nodes():
@@ -165,11 +130,10 @@ func _add_configuration_popup():
 		ConfigurationPopup = configuration_popup_scene.instantiate()
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
 		ConfigurationPopup.close_requested.connect( func(): ConfigurationPopup.queue_free() )
-		ConfigurationPopup.plugin_settings = plugin_settings
-		ConfigurationPopup.Plugin = self
+		ConfigurationPopup.plugin = self
 
 		EditorInterface.get_base_control().add_child(ConfigurationPopup)
-		ConfigurationPopup.apply_plugin_settings(plugin_settings)
+		ConfigurationPopup.apply_plugin_settings(settings)
 		# Connect signals
 		ConfigurationPopup.file_view_requested.connect( _file_view_requested )
 		ConfigurationPopup.file_import_requested.connect( _file_import_requested )
@@ -182,7 +146,6 @@ func _add_configuration_popup():
 		ConfigurationPopup.grab_focus()
 		ConfigurationPopup.request_attention()
 	#ConfigurationPopup.hide()
-	#ConfigurationPopup.force_native = true
 	#ConfigurationPopup.show()
 	#ConfigurationPopup.move_to_center()
 	#ConfigurationPopup.popup_centered()
@@ -236,9 +199,10 @@ func _file_save_requested(files, save_path: String = "", save_as_preset: bool = 
 		if !dir.dir_exists(save_path):  dir.make_dir(save_path)
 		plugin_config_dir = plugin_config_dir + "/presets/" + save_path
 
-		var presets: Array = plugin_settings.get_value("General", "presets", [])
+		#var presets: Array = settings.get_value("General", "presets", [])
+		var presets: Array = get_presets()
 		if !presets.has(save_path): presets.append(save_path)
-		plugin_settings.set_value("General", "presets", presets )
+		settings.set_value("General", "presets", presets )
 		_on_plugin_settings_saved()
 
 	for file_name in files:
@@ -278,7 +242,7 @@ func _import_project_settings(preset_path: String = ""):
 	if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from global: " + str(load_result))
 
 	var local_file := global_file
-	if plugin_settings.get_value("ProjectSettings", "include_metadata", false) != true:
+	if settings.get_value("ProjectSettings", "include_metadata", false) != true:
 			if local_file.has_section("application"):  local_file.erase_section("application")
 			if local_file.has_section("editor_plugins"):  local_file.erase_section("editor_plugins")
 
@@ -300,7 +264,7 @@ func _save_project_settings(preset_path: String = ""):
 		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from local: " + str(load_result))
 
 		var global_file := local_file
-		if plugin_settings.get_value("ProjectSettings", "include_metadata", false) != true:
+		if settings.get_value("ProjectSettings", "include_metadata", false) != true:
 			if global_file.has_section("application"):  global_file.erase_section("application")
 			if global_file.has_section("editor_plugins"):  global_file.erase_section("editor_plugins")
 
@@ -310,31 +274,19 @@ func _save_project_settings(preset_path: String = ""):
 
 
 func _preset_delete_requested(preset_name):
-	#print(plugin_config_dir + "/presets")
-	#var preset_dir = DirAccess.open(plugin_config_dir + "/presets/")
 	assert(OS.move_to_trash(plugin_config_dir + "/presets/" + preset_name) == Error.OK)
-	var preset: Array = plugin_settings.get_value("General", "presets", [])
+	#var preset: Array = settings.get_value("General", "presets", [])
+	var preset: Array = get_presets()
 	if preset.has(preset_name):
 		preset.erase(preset_name)
 
 
 func _on_plugin_settings_saved():
-	plugin_settings.save(plugin_config_dir + "/plugin_settings.cfg")
-	ConfigurationPopup.apply_plugin_settings(plugin_settings)
+	settings.save(plugin_config_dir + "/plugin_settings.cfg")
+	ConfigurationPopup.apply_plugin_settings(settings)
 
 
-#func plugin_config_folder_exists():
-	#var config_folder = EditorInterface.get_editor_paths().get_config_dir()
-	#var dir = DirAccess.open(config_folder)
-	#if dir:
-		#if dir.dir_exists("persistent_settings_plugin"):
-			#dir.open("persistent_settings_plugin")
-		#else:
-			#dir.make_dir("persistent_settings_plugin")
-			#dir.open("persistent_settings_plugin")
-
-
-#func _create_persistant_editor_settings():
+#func create_editor_settings():
 	#var settings = EditorInterface.get_editor_settings()
 	## `settings.set("some/property", 10)` also works as this class overrides `_set()` internally.
 	#settings.set_setting("persistent_settings/editor/property", 10)
@@ -343,3 +295,17 @@ func _on_plugin_settings_saved():
 	#settings.get_setting("persistent_settings/editor/property")
 	#var list_of_settings = settings.get_property_list()
 	#pass
+
+
+func create_plugin_settings():
+	var default_settings: ConfigFile = ConfigFile.new()
+	default_settings.open("res://addons/persistent_settings/plugin_settings_default.cfg")
+	var result = default_settings.save(plugin_config_dir + "/plugin_settings.cfg")
+	if result != Error.OK:
+		push_error("[persistent_settings] An issue occured while attempting to create default settings: %s" % [result])
+	#settings.save(plugin_config_dir + "/plugin_settings.cfg")
+	#print(default_settings.encode_to_text())
+
+
+func get_presets() -> Array:
+	return settings.get_value("General", "presets", [])

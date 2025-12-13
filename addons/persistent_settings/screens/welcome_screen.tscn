@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://4m5hnwa6eiko"]
+[gd_scene load_steps=7 format=3 uid="uid://4m5hnwa6eiko"]
 
-[ext_resource type="Texture2D" uid="uid://c5wfynrdo84nb" path="res://addons/persistent_settings/icons/AssetLib.svg" id="1_35ag3"]
+[ext_resource type="Texture2D" uid="uid://c5wfynrdo84nb" path="res://addons/persistent_settings/assets/AssetLib.svg" id="1_35ag3"]
+[ext_resource type="Texture2D" uid="uid://bbjmpw6s22c6w" path="res://addons/persistent_settings/assets/Folder.svg" id="2_qti4n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qds54"]
 content_margin_left = 8.0
@@ -353,6 +354,11 @@ popup/item_0/id = 0
 unique_name_in_owner = true
 layout_mode = 2
 text = "Delete Preset"
+
+[node name="ViewPresetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions/HBoxContainer"]
+visible = false
+layout_mode = 2
+icon = ExtResource("2_qti4n")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/QuickStartMargin/QuickStartGroup/PresetOptions"]
 layout_mode = 2
