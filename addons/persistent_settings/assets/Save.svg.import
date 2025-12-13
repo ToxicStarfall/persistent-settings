@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2cx7lwkuxfax"
-path="res://.godot/imported/GuiTreeArrowRight.svg-0632bc1c8284d6bdd73d470169c0ef37.ctex"
+uid="uid://deslvgjcu2ppa"
+path="res://.godot/imported/Save.svg-b86efe1d2338c73527b4bb6ebfae9893.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/persistent_settings/icons/GuiTreeArrowRight.svg"
-dest_files=["res://.godot/imported/GuiTreeArrowRight.svg-0632bc1c8284d6bdd73d470169c0ef37.ctex"]
+source_file="res://addons/persistent_settings/assets/Save.svg"
+dest_files=["res://.godot/imported/Save.svg-b86efe1d2338c73527b4bb6ebfae9893.ctex"]
 
 [params]
 
