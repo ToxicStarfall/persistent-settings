@@ -6,8 +6,13 @@ const FileNames = {
 	"project_settings": "project.godot",
 	"favorite_properties": "favorite_properties",
 	"favorite_nodes": "favorites.Node",
-	"favorite_files": "favorites",
-}
+	"favorite_files": "favorites", }
+const FileTypes = {
+	"project.godot": "cfg",
+	"favorite_properties": "cfg",
+	"favorites.Node": "plain",
+	"favorites": "plain", }
+
 
 # Editor variables
 const default_project_config_dir: String = "res://.godot/editor"
@@ -15,10 +20,11 @@ var default_editor_config_dir: String  # Set in _initialize_editor_variables()
 var default_plugin_config_dir: String  # Set in _initialize_editor_variables()
 
 # Plugin variables
-const default_plugin_config_folder: String = "/persistent_settings_plugin"
-const default_plugin_resource_folder: String = "res://addons/persistent_settings"
+const DEFAULT_CONFIG_FOLDER: String = "/persistent_settings_plugin"
+const DEFAULT_RESOURCE_FOLDER: String = "res://addons/persistent_settings"
 var plugin_config_dir: String
 var plugin_config_folder: String
+var presets_dir: String
 
 var settings: ConfigFile = ConfigFile.new()
 
@@ -41,7 +47,7 @@ var PopupButton: Button = Button.new()
 
 
 func _enter_tree() -> void:
-	_initialize_editor_variables()
+	#_initialize_editor_variables()
 	_initialize_plugin_variables()
 	_initialize_plugin_data()
 
@@ -61,14 +67,15 @@ func _exit_tree() -> void:
 
 
 # Initialize variables with editor constants
-func _initialize_editor_variables():
-	default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
-	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir + default_plugin_config_folder )
-
 # Initialize variarbles used by the plugin
 func _initialize_plugin_variables():
+#func _initialize_editor_variables():
+	default_editor_config_dir = EditorInterface.get_editor_paths().get_config_dir()
+	default_plugin_config_dir = ProjectSettings.globalize_path( default_editor_config_dir + DEFAULT_CONFIG_FOLDER )
+
 	plugin_config_dir = default_plugin_config_dir
-	plugin_config_folder = default_plugin_config_folder
+	plugin_config_folder = DEFAULT_CONFIG_FOLDER
+	presets_dir = plugin_config_dir + "/presets"
 
 	_add_plugin_nodes()
 	PopupButton.get_parent().move_child(PopupButton, PopupButton.get_index() - 5)
@@ -82,7 +89,6 @@ func _initialize_plugin_variables():
 
 	#ProjectMenu.add_item("asndkj")
 	#print(ProjectMenu)
-	#print(ProjectMenu.get_script().get_global_name())
 
 
 func _initialize_plugin_data():
@@ -95,11 +101,11 @@ func _initialize_plugin_data():
 		else:
 			dir.make_dir("persistent_settings_plugin")
 	# Check if "presets" folder exists
+	#if !dir.dir_exists(plug)
 	dir = DirAccess.open(plugin_config_dir)
-	if dir.dir_exists("presets"): pass
-	else: dir.make_dir("presets")
+	if !dir.dir_exists("presets"):  dir.make_dir("presets")
 
-	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + default_plugin_config_folder)
+	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + DEFAULT_CONFIG_FOLDER)
 	#print(config_folder + "/plugin_settings.cfg")
 	#print(settings.encode_to_text())
 	#var a = FileAccess.open(config_folder + "/plugin_settings.cfg", FileAccess.READ)
@@ -126,6 +132,8 @@ func _remove_plugin_nodes():
 
 
 func _add_configuration_popup():
+	get_file_formatted("project.godot")
+	get_file_formatted("favorites")
 	if !ConfigurationPopup:
 		ConfigurationPopup = configuration_popup_scene.instantiate()
 		ConfigurationPopup.theme = EditorInterface.get_editor_theme()
@@ -309,3 +317,16 @@ func create_plugin_settings():
 
 func get_presets() -> Array:
 	return settings.get_value("General", "presets", [])
+
+
+func get_file_formatted(file_name = "project.godot") -> Dictionary:
+	var file := ConfigFile.new()
+	file.load(plugin_config_dir + "/" + file_name)
+	#for type in FileTypes.keys():
+		#for a in type:
+			#if file_name == a:
+				#print("ASNJDK")
+	#print("FILE: " + file_name)
+	#print(file.encode_to_text())
+	var dict = {}
+	return dict

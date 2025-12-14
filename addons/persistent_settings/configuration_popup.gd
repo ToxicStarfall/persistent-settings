@@ -176,7 +176,6 @@ func _initialize_general_screen():
 	var FavoriteFilesGroup = %BasicScreen/%FavoriteFilesSection
 
 	GeneralSettingsGroup.get_node("ViewFolderButton").pressed.connect( func():
-		#OS.shell_open( ProjectSettings.globalize_path(EditorInterface.get_editor_paths().get_config_dir() + "/persistent_settings_plugin") ))
 		OS.shell_open( plugin.plugin_config_dir ))
 	#GeneralSettingsGroup.get_node("%auto_import").pressed.connect( func():
 		#plugin.settings.set_value("General", "auto_import", GeneralSettingsGroup.get_node("auto_import").button_pressed))
@@ -195,11 +194,9 @@ func _initialize_general_screen():
 
 func _initialize_file_viewer_screen():
 	var FileViewer = %FileViewerScreen
-	FileViewer.get_node("%ViewButton").pressed.connect( func():
-		#FileViewer.get_node("%ViewButton")
-		pass )
-	FileViewer.get_node("%ShowFolderButton").pressed.connect( func():
-		pass )
+	#var ViewerOutput = %FileViewerScreen/%ViewerOutput
+	FileViewer.plugin = plugin
+
 
 
 func apply_plugin_settings(settings: ConfigFile):
@@ -218,7 +215,6 @@ func apply_plugin_settings(settings: ConfigFile):
 	populate_dropdown(
 		WelcomeScreen.get_node("%PresetOptions/%PresetDropdown"),
 		plugin.get_presets(), 1)
-
 	# Settings Tab
 	var GeneralSettingsGroup = %BasicScreen/%GeneralSettingsGroup
 	#GeneralSettingsGroup.get_node("auto_import").button_pressed = plugin.settings.get_value("General", "auto_import", false)

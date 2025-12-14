@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdcro78mv83ss"]
+[gd_scene load_steps=4 format=3 uid="uid://bdcro78mv83ss"]
 
+[ext_resource type="Script" uid="uid://dlal0o7mjp1fc" path="res://addons/persistent_settings/screens/file_viewer.gd" id="1_46jq7"]
 [ext_resource type="PackedScene" uid="uid://c63vw425s834y" path="res://addons/persistent_settings/components/section_label.tscn" id="1_tq225"]
 [ext_resource type="Texture2D" uid="uid://b38fuadlabxso" path="res://addons/persistent_settings/assets/Info.svg" id="2_sliic"]
 
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_46jq7")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -51,7 +53,7 @@ popup/item_1/text = "Project Settings"
 popup/item_1/id = 1
 popup/item_2/text = "Favorite Nodes"
 popup/item_2/id = 2
-popup/item_3/text = "Favorite Node Properties"
+popup/item_3/text = "Favorite Properties"
 popup/item_3/id = 3
 popup/item_4/text = "Favorite Files"
 popup/item_4/id = 4
@@ -87,25 +89,31 @@ theme_override_constants/margin_bottom = 8
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="ViewerOutput" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/ViewerOutput"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Label" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer2"]
+[node name="Label" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/ViewerOutput/MarginContainer2"]
 layout_mode = 2
-text = "No settings available."
+text = "No file or preset is currently being viewed."
 fit_content = true
 
-[node name="SectionLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_tq225")]
+[node name="SectionLabel" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/ViewerOutput" instance=ExtResource("1_tq225")]
+visible = false
 layout_mode = 2
+
+[node name="Tree" type="Tree" parent="MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/ScrollContainer/ViewerOutput"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+columns = 2
