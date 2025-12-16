@@ -89,6 +89,7 @@ text = "Reset"
 [node name="ViewFolderButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/MarginContainer/GeneralSettingsGroup"]
 layout_mode = 2
 size_flags_horizontal = 0
+tooltip_text = "Open Persistent Settings's data fodler."
 text = "View Folder"
 icon = ExtResource("1_3ynh0")
 
@@ -146,6 +147,7 @@ text = "[b]Project Settings[/b]"
 fit_content = true
 
 [node name="HelpButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsLabel"]
+visible = false
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -172,7 +174,7 @@ theme_override_constants/separation = 8
 
 [node name="include_metadata" type="CheckBox" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
 layout_mode = 2
-tooltip_text = "Include per project specific data, such as the project's name, run configurations, or enabled plugins when importing and saving."
+tooltip_text = "Include per project specific data, such as the project's name, run configurations, autoloads, and enabled plugins when importing and saving."
 text = "Include project metadata"
 
 [node name="CollapseButton" type="Button" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer/ProjectSettingsMargin/ProjectSettingsSection"]
@@ -187,6 +189,7 @@ visible = false
 layout_mode = 2
 
 [node name="FavoritePropertiesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
 bbcode_enabled = true
@@ -194,6 +197,7 @@ text = "[b]Favorite Properties[/b]"
 fit_content = true
 
 [node name="FavoritePropertiesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
@@ -210,6 +214,7 @@ text = "No settings available."
 fit_content = true
 
 [node name="FavoriteNodesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
 bbcode_enabled = true
@@ -217,6 +222,7 @@ text = "[b]Favorite Nodes[/b]"
 fit_content = true
 
 [node name="FavoriteNodesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
@@ -233,6 +239,7 @@ text = "No settings available."
 fit_content = true
 
 [node name="FavoriteFilesLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_gyvit")
 bbcode_enabled = true
@@ -240,6 +247,7 @@ text = "[b]Favorite Files[/b]"
 fit_content = true
 
 [node name="FavoriteFilesMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
@@ -264,23 +272,3 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Apply Changes"
-
-[node name="FileViewerPanel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VSplitContainer"]
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VSplitContainer/FileViewerPanel"]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/FileViewerPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_cx65v")
-bbcode_enabled = true
-text = "[b]File Viewer[/b]"
-fit_content = true
-
-[node name="RawViewer" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VSplitContainer/FileViewerPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-fit_content = true

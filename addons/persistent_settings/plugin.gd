@@ -8,8 +8,8 @@ const FileNames = {
 	"favorite_nodes": "favorites.Node",
 	"favorite_files": "favorites", }
 const FileTypes = {
-	"project.godot": "cfg",
-	"favorite_properties": "cfg",
+	"project.godot": "config",
+	"favorite_properties": "config",
 	"favorites.Node": "plain",
 	"favorites": "plain", }
 
@@ -251,15 +251,17 @@ func _import_project_settings(preset_path: String = ""):
 
 	var local_file := global_file
 	if settings.get_value("ProjectSettings", "include_metadata", false) != true:
-			if local_file.has_section("application"):  local_file.erase_section("application")
-			if local_file.has_section("editor_plugins"):  local_file.erase_section("editor_plugins")
+		# Erase "metadata" sections
+		if local_file.has_section("application"):  local_file.erase_section("application")
+		if local_file.has_section("autoload"):  local_file.erase_section("autoload")
+		if local_file.has_section("editor_plugins"):  local_file.erase_section("editor_plugins")
 
-			# Implant local project settings to fill in gaps
-			for section in ["application", "editor_plugins"]:
-				var a = ConfigFile.new()
-				a.load("res://" + "project.godot")
-				for key in a.get_section_keys(section):
-					local_file.set_value(section, key, a.get_value(section , key))
+		# Implant local project settings to fill in gaps
+		for section in ["application", "autoload", "editor_plugins"]:
+			var a = ConfigFile.new()
+			a.load("res://" + "project.godot")
+			for key in a.get_section_keys(section):
+				local_file.set_value(section, key, a.get_value(section , key))
 
 	var save_result = local_file.save("res://" + "project.godot")
 	if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to local: " + str(save_result))
@@ -274,6 +276,7 @@ func _save_project_settings(preset_path: String = ""):
 		var global_file := local_file
 		if settings.get_value("ProjectSettings", "include_metadata", false) != true:
 			if global_file.has_section("application"):  global_file.erase_section("application")
+			if global_file.has_section("autoload"):  global_file.erase_section("autoload")
 			if global_file.has_section("editor_plugins"):  global_file.erase_section("editor_plugins")
 
 		var save_result = global_file.save(preset_path + "project.godot")
@@ -283,7 +286,6 @@ func _save_project_settings(preset_path: String = ""):
 
 func _preset_delete_requested(preset_name):
 	assert(OS.move_to_trash(plugin_config_dir + "/presets/" + preset_name) == Error.OK)
-	#var preset: Array = settings.get_value("General", "presets", [])
 	var preset: Array = get_presets()
 	if preset.has(preset_name):
 		preset.erase(preset_name)

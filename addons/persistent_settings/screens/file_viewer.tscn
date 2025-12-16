@@ -61,12 +61,15 @@ popup/item_4/id = 4
 [node name="ViewButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Show a preview of the specified preset/file content."
 text = "View"
 
 [node name="ShowFolderButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Show in folder"
+tooltip_text = "Show the specified preset folder or file.
+Note: This will open the specified file using the file's default program. "
+text = "Show Folder"
 
 [node name="Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 visible = false

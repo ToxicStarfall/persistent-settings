@@ -2,8 +2,8 @@
 extends OptionButton
 
 
-const OFF = preload("res://addons/persistent_settings/icons/GuiTreeArrowRight.svg")
-const ON = preload("res://addons/persistent_settings/icons/GuiTreeArrowDown.svg")
+#const OFF = preload("res://addons/persistent_settings/icons/GuiTreeArrowRight.svg")
+#const ON = preload("res://addons/persistent_settings/icons/GuiTreeArrowDown.svg")
 
 const default_text = "Select Preset"
 

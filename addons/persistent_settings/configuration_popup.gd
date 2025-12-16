@@ -194,7 +194,6 @@ func _initialize_general_screen():
 
 func _initialize_file_viewer_screen():
 	var FileViewer = %FileViewerScreen
-	#var ViewerOutput = %FileViewerScreen/%ViewerOutput
 	FileViewer.plugin = plugin
 
 
@@ -232,11 +231,15 @@ func apply_plugin_settings(settings: ConfigFile):
 	populate_dropdown(
 		FileViewer.get_node("%PresetsDropdown"),
 		plugin.get_presets(), 1)
+	# TODO Check for if deleted preset matches selected option to clear output
+	# (No need to clear output if the preset/files still exist)
+	FileViewer.clear_output()
 
 
 
 # Adds/refreshes dropdown options in a dropdown
 func populate_dropdown(dropdown: OptionButton, dropdown_values: Array, start_idx: int = 0):
+	dropdown.select(0)
 	# Reset dropdown options. (deletes all generated dropdown optoins)
 	for i in dropdown.item_count - start_idx: dropdown.remove_item(dropdown.item_count - start_idx)
 	# Add new dropdown options.

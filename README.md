@@ -3,15 +3,17 @@
 </h1>
 <img width="320" height="224" alt="persistant_settings" src="https://github.com/user-attachments/assets/4e06c7b0-82f5-4201-a444-2c4898707740" />
 <p>
-	Persistent Settings is a addon for Godot which lets you quickly save and import your favorited nodes, node properties, files, or project settings between different projects. <br>
-  Save your favorite settings and create presets to help speed up the setup phase of new projects.
+	Persistent Settings is a addon for Godot which lets you quickly save and import your favorited nodes, node properties, files, or project settings between different projects.
+	<br><br>
+	Save your favorite settings and create presets to help speed up the setup phase of new projects.
 </p>
 
-<br>
+
 <p>
 	<a href="https://github.com/ToxicStarfall/persistant-settings/releases">Releases</a> -
 	<a href="https://godotengine.org/asset-library/asset/4512">Asset Library</a>
 </p>
+
 
 <br>
 <h2>Features</h2>
@@ -31,22 +33,21 @@ _Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Go
 - Save different configurations for each preset.
 <img width="550" height="258" alt="persistant_settings_presets_example" src="https://github.com/user-attachments/assets/2ecc8b11-3479-4004-8623-87c646bcd8db" />
 
-
 <br>
 <h2>Usage</h2>
 <h4>Quick Start Tab</h4>
 
 - Import and Save options
-	- Import options will retrieve the saved settings from the plugin's configuration folder (see "General Settings").
-	- Save options will retrieve the saved settings from the project's configuration folder (project/.godot/editor).
- 	- Using the "All" or "Selected" buttons will import or save the specified settings/files. 
+	- Import options will retrive the saved settings from the plugin's configuration folder (see "General Settings").
+	- Save options will retrive the saved settings from the project's configuration folder (project/.godot/editor).
 	- Press the download icon to the right of import/save toggles to import or save only that setting.
 	- Toggle the different options to include or exclude that setting from being saved.
 
 - Preset Options
 	- Select a preset from the dropdown to delete, import, or save the preset.
-	- Specify a new preset name to create a new one, or save an existing one (ignores preset dropdown). A new folder will be created in the "presets" folder in this plugin's configuration folder.
+	- Specify a new preset name to create a new one, or save an existing one (ignores preset dropdown).
 	- Select the import or save buttons to save or import from the selected preset.
+	- Note: Selected save/import options above will apply when saving or importing presets.
 - Press the "Apply" button to save changes to save/import options.
 
 <h4>Basic Settings Tab</h4>
@@ -57,8 +58,16 @@ _Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Go
 	- "Show on launch" - toggle to open the persistent settings configuration popup automatically on project launch.
 - Project Settings
 	- Configure settings related to the project settings file
-	- "Include project metadata" - toggle to include per project specific data, such as the project's name, run configurations, or enabled plugins when importing and saving.
+	- "Include project metadata" - toggle to include per project specific data, such as the project's name, run configurations, enabled plugins, and autoloads when importing and saving.
 - Press the "Apply" button to save changes.
+
+<h4>File Viewer</h4>
+
+- Preset Selector - Select a preset to view or open.
+- File Selector - Select a file type to view or open.
+- View - Generate a preview of the selecetd preset/file's content
+- Show Folder - Opens the folder of the selected preset or file.
+	Note: Viewing with a file type selected will open the file using the file type's specified program.
 
 
 <br>
