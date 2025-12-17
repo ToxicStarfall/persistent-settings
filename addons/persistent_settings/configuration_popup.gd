@@ -137,8 +137,9 @@ func _initialize_welcome_screen():
 			if !preset_dropdown.selected == 0:
 				var preset = DirAccess.open( plugin.plugin_config_dir )
 				preset.change_dir("presets")
-				preset.change_dir(preset_dropdown.get_item_text( preset_dropdown.selected ))
-				file_import_requested.emit( Array(preset.get_files()) )
+				var preset_name = preset_dropdown.get_item_text( preset_dropdown.selected )
+				preset.change_dir(preset_name)
+				file_import_requested.emit( Array(preset.get_files()), true, preset_name )
 			pass )
 	# Save files into specified preset folder.
 	WelcomeScreen.get_node("%PresetOptions/%SavePresetButton").pressed.connect( func(): #.bind())

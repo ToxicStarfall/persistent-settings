@@ -105,18 +105,11 @@ func _initialize_plugin_data():
 	dir = DirAccess.open(plugin_config_dir)
 	if !dir.dir_exists("presets"):  dir.make_dir("presets")
 
-	#config_folder = ProjectSettings.globalize_path(plugin_config_dir + DEFAULT_CONFIG_FOLDER)
-	#print(config_folder + "/plugin_settings.cfg")
-	#print(settings.encode_to_text())
-	#var a = FileAccess.open(config_folder + "/plugin_settings.cfg", FileAccess.READ)
-	#print(a.get_as_text())
-
 	if settings.load(plugin_config_dir + "/plugin_settings.cfg") != Error.OK:
 		create_plugin_settings()
 
 	if settings.get_value("General", "show_on_launch", false) == true:
 		_add_configuration_popup()
-	#_apply_plugin_settings()
 
 
 func _add_plugin_nodes():
@@ -174,12 +167,12 @@ func _file_import_requested(files, preset: bool = false, path: String = "", ):
 
 	for file_name in files:
 		if file_name == "project.godot":
-			_import_project_settings()
+			_import_project_settings(plugin_config_dir)
 			continue
 
 		var global_file := ConfigFile.new()
 		var load_result = global_file.load(plugin_config_dir + "/" + file_name)
-		if !load_result == Error.OK:  push_error("could not load from global: " + str(load_result))
+		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from global: " + str(load_result))
 
 		# Detect plain unformatted files (non cfg files)
 		if global_file.encode_to_text() == "":
@@ -193,7 +186,7 @@ func _file_import_requested(files, preset: bool = false, path: String = "", ):
 		else:
 			var local_file := global_file
 			var save_result = local_file.save(default_project_config_dir + "/" + file_name)
-			if !save_result == Error.OK:  push_error("could not save to local: " + str(save_result))
+			if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to local: " + str(save_result))
 			#else:  print("%s imported" % [file_name])
 
 
@@ -215,12 +208,12 @@ func _file_save_requested(files, save_path: String = "", save_as_preset: bool = 
 
 	for file_name in files:
 		if file_name == "project.godot":
-			_save_project_settings(plugin_config_dir + "/" )#+ save_path)
+			_save_project_settings(plugin_config_dir)
 			continue
 
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load(default_project_config_dir + "/" + file_name)
-		if !load_result == Error.OK:  push_error("could not load from local: " + str(load_result))
+		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from local: " + str(load_result))
 
 		# Detect plain unformatted files (non cfg files)
 		# plain files return error as empty string when attempting to encode to text
@@ -235,7 +228,7 @@ func _file_save_requested(files, save_path: String = "", save_as_preset: bool = 
 		else:
 			var global_file := local_file
 			var save_result = global_file.save(plugin_config_dir + "/" + file_name)
-			if !save_result == Error.OK:  push_error("could not save to global: " + str(save_result))
+			if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to global: " + str(save_result))
 			#else:  print("%s saved" % [file_name])
 
 
@@ -246,8 +239,8 @@ func _file_overwrite_requested():
 
 func _import_project_settings(preset_path: String = ""):
 	var global_file := ConfigFile.new()
-	var load_result = global_file.load(plugin_config_dir + "/" + "project.godot")
-	if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from global: " + str(load_result))
+	var load_result = global_file.load(preset_path + "/" + "project.godot")
+	if !load_result == Error.OK:  push_error("[persistent_settings] Could not load project.godot from global: " + str(load_result))
 
 	var local_file := global_file
 	if settings.get_value("ProjectSettings", "include_metadata", false) != true:
@@ -260,18 +253,19 @@ func _import_project_settings(preset_path: String = ""):
 		for section in ["application", "autoload", "editor_plugins"]:
 			var a = ConfigFile.new()
 			a.load("res://" + "project.godot")
-			for key in a.get_section_keys(section):
-				local_file.set_value(section, key, a.get_value(section , key))
+			if a.has_section(section):
+				for key in a.get_section_keys(section):
+					local_file.set_value(section, key, a.get_value(section , key))
 
 	var save_result = local_file.save("res://" + "project.godot")
-	if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to local: " + str(save_result))
+	if !save_result == Error.OK:  push_error("[persistent_settings] Could not save project.godot to local: " + str(save_result))
 	#else:  print("%s imported" % ["project.godot"])
 
 
 func _save_project_settings(preset_path: String = ""):
 		var local_file := ConfigFile.new()
 		var load_result = local_file.load("res://" + "project.godot")
-		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load from local: " + str(load_result))
+		if !load_result == Error.OK:  push_error("[persistent_settings] Could not load project.godot from local: " + str(load_result))
 
 		var global_file := local_file
 		if settings.get_value("ProjectSettings", "include_metadata", false) != true:
@@ -279,8 +273,8 @@ func _save_project_settings(preset_path: String = ""):
 			if global_file.has_section("autoload"):  global_file.erase_section("autoload")
 			if global_file.has_section("editor_plugins"):  global_file.erase_section("editor_plugins")
 
-		var save_result = global_file.save(preset_path + "project.godot")
-		if !save_result == Error.OK:  push_error("[persistent_settings] Could not save to global: " + str(save_result))
+		var save_result = global_file.save(preset_path + "/" + "project.godot")
+		if !save_result == Error.OK:  push_error("[persistent_settings] Could not save project.godot to global: " + str(save_result))
 		#else:  print("%s saved" % ["project.godot"])
 
 
@@ -309,7 +303,8 @@ func _on_plugin_settings_saved():
 
 func create_plugin_settings():
 	var default_settings: ConfigFile = ConfigFile.new()
-	default_settings.open("res://addons/persistent_settings/plugin_settings_default.cfg")
+	default_settings.load("res://addons/persistent_settings/plugin_settings_default.cfg")
+	settings = default_settings
 	var result = default_settings.save(plugin_config_dir + "/plugin_settings.cfg")
 	if result != Error.OK:
 		push_error("[persistent_settings] An issue occured while attempting to create default settings: %s" % [result])
