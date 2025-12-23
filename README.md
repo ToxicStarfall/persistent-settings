@@ -16,6 +16,10 @@
 
 
 <br>
+
+> [!NOTE]
+> Disabling and re-enabling the plugin may fix any errors which occur while saving, importing, or viewing files.
+
 <h2>Features</h2>
 <h4>Saving and Importing</h4>
 
