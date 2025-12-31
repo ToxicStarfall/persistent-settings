@@ -16,6 +16,10 @@
 
 
 <br>
+
+> [!NOTE]
+> Disabling and re-enabling the plugin may fix any errors which occur while saving, importing, or viewing files.
+
 <h2>Features</h2>
 <h4>Saving and Importing</h4>
 
@@ -63,11 +67,10 @@ _Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Go
 
 <h4>File Viewer</h4>
 
-- Preset Selector - Select a preset to view or open.
-- File Selector - Select a file type to view or open.
-- View - Generate a preview of the selecetd preset/file's content
-- Show Folder - Opens the folder of the selected preset or file.
-	Note: Viewing with a file type selected will open the file using the file type's specified program.
+- Preset Selector - (Optional) Select a preset to view or open. Defaults to the plugin's config folder.
+- File Selector - (Optional) Select a file type to view or open. Defaults to all files in the preset.
+- View - Generate a preview of the selected preset/file's content. 
+- Show Folder - Opens the folder of the selected preset. If a file is selected, then open it using the file type's specified program.
 
 
 <br>
