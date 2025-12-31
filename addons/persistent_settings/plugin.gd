@@ -103,7 +103,9 @@ func _initialize_plugin_data():
 	# Check if "presets" folder exists
 	#if !dir.dir_exists(plug)
 	dir = DirAccess.open(plugin_config_dir)
-	if !dir.dir_exists("presets"):  dir.make_dir("presets")
+	if !dir.dir_exists("presets"):
+		dir.make_dir("presets")
+		print("[persistent_settings] Presets folder created.")
 
 	if settings.load(plugin_config_dir + "/plugin_settings.cfg") != Error.OK:
 		create_plugin_settings()
@@ -117,6 +119,8 @@ func _add_plugin_nodes():
 	PopupButton.pressed.connect( _add_configuration_popup )
 	#add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
 	add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, PopupButton)
+
+	_initialize_plugin_data()  # Checl fpr missing files/folders
 
 
 func _remove_plugin_nodes():
@@ -308,6 +312,8 @@ func create_plugin_settings():
 	var result = default_settings.save(plugin_config_dir + "/plugin_settings.cfg")
 	if result != Error.OK:
 		push_error("[persistent_settings] An issue occured while attempting to create default settings: %s" % [result])
+	else: print("[persistent_settings] Default settings succesfully created.")
+
 	#settings.save(plugin_config_dir + "/plugin_settings.cfg")
 	#print(default_settings.encode_to_text())
 

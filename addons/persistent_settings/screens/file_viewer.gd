@@ -29,11 +29,14 @@ func _enter_tree() -> void:
 			open_file( path, file_name )
 		else:
 			var dir = DirAccess.open( path )
+			var empty = true
 			# Get all file types that are present in the selected folder via their file names
 			for file in dir.get_files():
 				if plugin.FileNames.values().has(file):
+					empty = false
 					# Reconvert file to file_name
 					open_file( path, plugin.FileNames.find_key(file) )
+			if empty: print("[persistent_settings] No files to view")
 		pass )
 
 	%ShowFolderButton.pressed.connect( func():
