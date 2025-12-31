@@ -69,7 +69,7 @@ _Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Go
 
 - Preset Selector - (Optional) Select a preset to view or open. Defaults to the plugin's config folder.
 - File Selector - (Optional) Select a file type to view or open. Defaults to all files in the preset.
-- View - Generate a preview of the selected preset/file's content. 
+- View - Generate a preview of the selected preset/file's content.
 - Show Folder - Opens the folder of the selected preset. If a file is selected, then open it using the file type's specified program.
 
 
