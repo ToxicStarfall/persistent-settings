@@ -18,7 +18,8 @@
 <br>
 
 > [!NOTE]
-> Disabling and re-enabling the plugin may fix any errors which occur while saving, importing, or viewing files.
+> Disabling and re-enabling the plugin may fix any errors related to saving, importing, or viewing files.
+
 
 <h2>Features</h2>
 <h4>Saving and Importing</h4>
@@ -28,8 +29,11 @@
 <img width="162" height="332" alt="persistant_settings_favorite_nodes" src="https://github.com/user-attachments/assets/782b7cdd-2c0e-4746-8801-b015b616201d" />
 <img width="341" height="215" alt="persistant_settings_favorite_node_properties" src="https://github.com/user-attachments/assets/4f90ceba-9e74-4a46-af0e-f73b678788da" />
 
+> [!WARNING]
+> Importing files will fail if the files do not exist. Please ensure that you have saved said files previously.
 
-_Note: This addon saves its data in Godot's config folder (...AppData/Roaming/Godot/persistant_settings_plugin)_
+> [!NOTE]
+> This addon saves its data in Godot's config folder (...AppData/Roaming/Godot/persistant_settings_plugin)
 
 <h4>Presets</h4>
 
